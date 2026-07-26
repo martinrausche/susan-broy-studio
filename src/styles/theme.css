@@ -12,7 +12,7 @@
   --text-secondary: #555566;
   --text-muted: #888899;
   
-  --accent-neon: #B8C900;
+  --accent-neon: #111116;
   --accent-gold: #9E7B10;
   --accent-blue: #0066CC;
 
@@ -35,7 +35,7 @@
   --text-secondary: #A0A0B0;
   --text-muted: #666678;
   
-  --accent-neon: #E2F518;
+  --accent-neon: #FFFFFF;
   --accent-gold: #D4AF37;
   --accent-blue: #0A84FF;
 
@@ -85,7 +85,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, textarea, select {
   background-color: var(--input-bg) !important;
   color: var(--input-text) !important;
   border: 1px solid var(--input-border) !important;
-  font-size: 14px !important; /* Prevents auto-zoom on iOS Safari */
+  font-size: 14px !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
 
@@ -96,11 +96,11 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, textarea, select {
 }
 
 .dark .input-studio:focus {
-  border-color: var(--accent-neon) !important;
-  box-shadow: 0 0 0 2px rgba(226, 245, 24, 0.2) !important;
+  border-color: #FFFFFF !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) !important;
 }
 
-/* Smartphone Container Frame (Fluid for Mobile Viewports) */
+/* Smartphone Container Frame */
 .phone-frame {
   width: 340px;
   max-width: calc(100vw - 32px);
@@ -153,15 +153,15 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, textarea, select {
 }
 
 .badge-accent {
-  background: rgba(184, 201, 0, 0.15);
-  color: #445200;
-  border: 1px solid rgba(184, 201, 0, 0.35);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 .dark .badge-accent {
-  background: rgba(226, 245, 24, 0.15);
-  color: var(--accent-neon);
-  border: 1px solid rgba(226, 245, 24, 0.35);
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .badge-status-ready {
@@ -174,7 +174,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, textarea, select {
   color: #34C759;
 }
 
-/* Custom Buttons */
+/* Custom Buttons - Architectural Gallery Styling (No Higgsfield Neon) */
 .btn-primary {
   background: var(--text-primary);
   color: var(--bg-primary);
@@ -216,7 +216,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, textarea, select {
   background: #111116;
   color: #FFFFFF;
   font-weight: 700;
-  padding: 12px 24px;
+  padding: 14px 24px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -235,16 +235,15 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, textarea, select {
 }
 
 .dark .btn-accent {
-  background: var(--accent-neon);
+  background: #FFFFFF;
   color: #000000;
 }
 
 .dark .btn-accent:hover {
-  background: #EEFF33;
-  box-shadow: 0 0 25px rgba(226, 245, 24, 0.45);
+  background: #EAEAEA;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
 }
 
-/* Utility to hide scrollbar on mobile nav */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }

@@ -3,7 +3,7 @@ import { CONTENT_CATEGORIES, ART_MEDIUMS, PRESET_IMAGES, generatePostVariants } 
 import { Upload, Sparkles, Image as ImageIcon, Calendar, Tag, MapPin, Clock, Trash2, Plus, Film } from 'lucide-react';
 
 export default function EditorialInput({ onNewPostCreated }) {
-  const [category, setCategory] = useState('artwork'); // 'artwork', 'exhibition', 'atelier', 'statement'
+  const [category, setCategory] = useState('artwork');
   const [title, setTitle] = useState('');
   const [medium, setMedium] = useState('concrete');
   const [location, setLocation] = useState('Galerie von&von, Nürnberg');
@@ -117,7 +117,7 @@ export default function EditorialInput({ onNewPostCreated }) {
 
       <form onSubmit={handleGenerate} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* Category Selection Tabs (Full Width 12 Cols) */}
+        {/* Category Selection Tabs */}
         <div className="lg:col-span-12 flex flex-col gap-3">
           <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300">
             1. Kategorie / Art des Postings wählen:
@@ -130,7 +130,7 @@ export default function EditorialInput({ onNewPostCreated }) {
                 onClick={() => setCategory(cat.id)}
                 className={`p-4 rounded-xl border text-left transition-all flex flex-col gap-1.5 ${
                   category === cat.id
-                    ? 'bg-zinc-900 text-white dark:bg-yellow-400/10 dark:border-yellow-400 dark:text-yellow-400 border-zinc-900 shadow-md scale-[1.02]'
+                    ? 'bg-zinc-900 text-white dark:bg-zinc-800 dark:border-white dark:text-white border-zinc-900 shadow-md scale-[1.02]'
                     : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-gray-300 hover:border-zinc-400 dark:hover:border-zinc-700'
                 }`}
               >
@@ -163,7 +163,7 @@ export default function EditorialInput({ onNewPostCreated }) {
 
             {/* Empty State / Main Multi-Upload Zone */}
             {uploadedAssets.length === 0 ? (
-              <label className="border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-yellow-400/80 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all bg-zinc-50/70 dark:bg-zinc-950/60 hover:bg-zinc-100/70 dark:hover:bg-zinc-900/60 group text-center min-h-[220px]">
+              <label className="border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-white rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all bg-zinc-50/70 dark:bg-zinc-950/60 hover:bg-zinc-100/70 dark:hover:bg-zinc-900/60 group text-center min-h-[220px]">
                 <div className="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-700 dark:text-gray-300 group-hover:scale-110 transition-transform">
                   <Upload className="w-6 h-6" />
                 </div>
@@ -224,7 +224,7 @@ export default function EditorialInput({ onNewPostCreated }) {
                     </div>
                   ))}
 
-                  <label className="aspect-square border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-yellow-400 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all bg-zinc-50 dark:bg-zinc-950/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-500 dark:text-gray-400">
+                  <label className="aspect-square border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-white rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all bg-zinc-50 dark:bg-zinc-950/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-500 dark:text-gray-400">
                     <Plus className="w-6 h-6" />
                     <span className="text-[10px] font-bold">Weitere hinzufügen</span>
                     <input 
@@ -275,7 +275,6 @@ export default function EditorialInput({ onNewPostCreated }) {
             {/* Dynamic Category Specific Fields */}
             {category === 'exhibition' ? (
               
-              /* Exhibition Specific Fields */
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-bold text-zinc-700 dark:text-gray-300 uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
@@ -308,7 +307,6 @@ export default function EditorialInput({ onNewPostCreated }) {
 
             ) : category === 'artwork' ? (
               
-              /* Artwork Specific Fields */
               <div>
                 <label className="text-xs font-bold text-zinc-700 dark:text-gray-300 uppercase tracking-wider block mb-1.5">
                   Material / Kategorie des Kunstwerks
@@ -389,7 +387,7 @@ export default function EditorialInput({ onNewPostCreated }) {
                     onClick={() => setPostType('reel')}
                     className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
                       postType === 'reel' 
-                        ? 'bg-zinc-900 text-white dark:bg-yellow-400/10 dark:border-yellow-400 dark:text-yellow-400 shadow-sm' 
+                        ? 'bg-zinc-900 text-white dark:bg-white dark:border-white dark:text-black shadow-sm' 
                         : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-gray-400 hover:text-zinc-900 dark:hover:text-white'
                     }`}
                   >
@@ -400,7 +398,7 @@ export default function EditorialInput({ onNewPostCreated }) {
                     onClick={() => setPostType('feed')}
                     className={`flex-1 py-2 px-3 rounded-lg text-xs font-semibold border transition-all ${
                       postType === 'feed' 
-                        ? 'bg-zinc-900 text-white dark:bg-yellow-400/10 dark:border-yellow-400 dark:text-yellow-400 shadow-sm' 
+                        ? 'bg-zinc-900 text-white dark:bg-white dark:border-white dark:text-black shadow-sm' 
                         : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-gray-400 hover:text-zinc-900 dark:hover:text-white'
                     }`}
                   >
