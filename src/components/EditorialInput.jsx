@@ -1,25 +1,24 @@
 import React, { useState } from 'react';
 import { ART_MEDIUMS, PRESET_IMAGES, generatePostVariants } from '../services/geminiCopilot';
-import { Upload, Sparkles, Image as ImageIcon, Calendar, Tag } from 'lucide-react';
+import { Upload, Sparkles, Image as ImageIcon, Video, Calendar, Tag, Trash2, Plus, Film, CheckCircle2 } from 'lucide-react';
 
-const PRESET_ARTWORKS = [
+const DEMO_ASSET_BUNDLES = [
   {
-    title: 'Beton-Skulptur "STRUCTURE I"',
+    title: 'Beton-Skulptur "SILENCE IV" (3 Werkstatt-Fotos + 1 Video)',
     medium: 'concrete',
-    url: PRESET_IMAGES.concrete,
-    desc: 'Rauer Gießbeton mit geometrischem Schattenwurf'
+    assets: [
+      { id: 'a1', type: 'image', url: PRESET_IMAGES.concrete, name: 'Gesamtansicht_Front.jpg' },
+      { id: 'a2', type: 'image', url: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', name: 'Detail_Struktur_Guss.jpg' },
+      { id: 'a3', type: 'video', url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80', name: 'LivePhoto_Schattenlauf.mov', isLivePhoto: true }
+    ]
   },
   {
-    title: 'Metall & Beton "SPATIAL BALANCE"',
-    medium: 'mixed',
-    url: PRESET_IMAGES.metal,
-    desc: 'Stahl-Installation auf schwerem Beton-Sockel'
-  },
-  {
-    title: 'S/W Grafik "NOIR & NEON NO. 3"',
+    title: 'S/W Grafik "NOIR & NEON" (2 Leinwand-Aufnahmen)',
     medium: 'bw_painting',
-    url: PRESET_IMAGES.bw_painting,
-    desc: 'Acryl auf Strukturleinwand mit leuchtendem Akzent'
+    assets: [
+      { id: 'b1', type: 'image', url: PRESET_IMAGES.bw_painting, name: 'Leinwand_Gesamt.jpg' },
+      { id: 'b2', type: 'image', url: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80', name: 'Detail_Neon_Farbauftrag.jpg' }
+    ]
   }
 ];
 
@@ -31,16 +30,41 @@ export default function EditorialInput({ onNewPostCreated }) {
   const [postType, setPostType] = useState('reel');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [accentColor, setAccentColor] = useState('#E2F518');
-  const [selectedPresetUrl, setSelectedPresetUrl] = useState(PRESET_ARTWORKS[0].url);
-  const [customFileUrl, setCustomFileUrl] = useState(null);
+  
+  // Multi-Asset State
+  const [uploadedAssets, setUploadedAssets] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setCustomFileUrl(url);
-    }
+  // Handle Multi-file Upload (Supports Images, Videos & Apple Live Photos .heic/.mov)
+  const handleMultipleFiles = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    const newAssets = files.map((file, idx) => {
+      const isVideo = file.type.startsWith('video/') || file.name.endsWith('.mov') || file.name.endsWith('.mp4');
+      const isLivePhoto = file.name.endsWith('.mov') || file.name.includes('Live');
+
+      return {
+        id: `file-${Date.now()}-${idx}`,
+        name: file.name,
+        type: isVideo ? 'video' : 'image',
+        isLivePhoto,
+        url: URL.createObjectURL(file),
+        fileObject: file
+      };
+    });
+
+    setUploadedAssets(prev => [...prev, ...newAssets]);
+  };
+
+  const removeAsset = (assetId) => {
+    setUploadedAssets(prev => prev.filter(a => a.id !== assetId));
+  };
+
+  const loadDemoBundle = (bundle) => {
+    setTitle(bundle.title);
+    setMedium(bundle.medium);
+    setUploadedAssets(bundle.assets);
   };
 
   const handleGenerate = async (e) => {
@@ -53,6 +77,11 @@ export default function EditorialInput({ onNewPostCreated }) {
       .filter(t => t.length > 0)
       .map(t => t.startsWith('@') ? t : `@${t}`);
 
+    // If no assets uploaded, use default medium preview
+    const primaryMediaUrl = uploadedAssets.length > 0 
+      ? uploadedAssets[0].url 
+      : PRESET_IMAGES[medium] || PRESET_IMAGES.concrete;
+
     const inputData = {
       title: title || 'Kunstwerk ohne Titel',
       medium,
@@ -61,7 +90,9 @@ export default function EditorialInput({ onNewPostCreated }) {
       type: postType,
       date,
       accentColor,
-      mediaUrl: customFileUrl || selectedPresetUrl
+      mediaUrl: primaryMediaUrl,
+      assetCount: Math.max(1, uploadedAssets.length),
+      assetList: uploadedAssets
     };
 
     try {
@@ -76,8 +107,6 @@ export default function EditorialInput({ onNewPostCreated }) {
     }
   };
 
-  const currentMediaUrl = customFileUrl || selectedPresetUrl;
-
   return (
     <section className="max-w-6xl mx-auto px-4 py-8">
       
@@ -87,21 +116,21 @@ export default function EditorialInput({ onNewPostCreated }) {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="badge badge-concrete">Redaktionsplan Input</span>
-              <span className="badge badge-accent">Susan Broy Ästhetik</span>
+              <span className="badge badge-accent">Multi-Asset & Live Photos</span>
             </div>
             <h1 className="font-heading text-2xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
-              Neues Kunstwerk & Thema erfassen
+              Medien hochladen & Post-Varianten generieren
             </h1>
             <p className="text-xs text-zinc-600 dark:text-gray-400 mt-1 max-w-2xl leading-relaxed">
-              Erfassen Sie Werkdaten für Beton-Skulpturen, Metall-Installationen oder S/W-Malereien. 
-              Google Gemini AI generiert daraus **3 hochwertige, komplett ausgearbeitete Varianten** zur Freigabe.
+              Laden Sie mehrere Fotos, Detail-Aufnahmen, Videos oder **Apple Live Photos** eines Kunstwerks hoch. 
+              Gemini AI kombiniert Ihre Medien zu 3 verschiedenen Post-Formaten (Karussell, Reel-Animation oder Single Hero-Shot).
             </p>
           </div>
           <div className="text-right hidden md:block">
             <span className="text-xs text-zinc-500 dark:text-gray-500 block">Status Ökosystem</span>
             <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 justify-end mt-1">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              Google AI Pro Ready
+              Multi-Media Engine Ready
             </span>
           </div>
         </div>
@@ -109,79 +138,125 @@ export default function EditorialInput({ onNewPostCreated }) {
 
       <form onSubmit={handleGenerate} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* Left Column: Media Selection & Upload (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col gap-6">
+        {/* Left Column: Multi-Asset Upload Vault (6 cols) */}
+        <div className="lg:col-span-6 flex flex-col gap-6">
           
-          {/* Main Media Preview Box */}
           <div className="glass-panel p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-2">
                 <ImageIcon className="w-4 h-4 text-amber-500" />
-                Medien-Vorschau (Kunstwerk Foto / Video)
+                Medien-Pool für dieses Posting ({uploadedAssets.length} Dateien)
               </label>
-              {customFileUrl && (
+              {uploadedAssets.length > 0 && (
                 <button
                   type="button"
-                  onClick={() => setCustomFileUrl(null)}
+                  onClick={() => setUploadedAssets([])}
                   className="text-[11px] text-red-500 hover:underline font-semibold"
                 >
-                  Zurück zu Presets
+                  Alle entfernen
                 </button>
               )}
             </div>
 
-            <div className="relative aspect-square rounded-xl overflow-hidden bg-zinc-900 border border-zinc-300 dark:border-zinc-800 group">
-              <img 
-                src={currentMediaUrl} 
-                alt="Kunstwerk Vorschau" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+            {/* Empty State / Main Multi-Upload Zone */}
+            {uploadedAssets.length === 0 ? (
+              <label className="border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-yellow-400/80 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all bg-zinc-50/70 dark:bg-zinc-950/60 hover:bg-zinc-100/70 dark:hover:bg-zinc-900/60 group text-center min-h-[220px]">
+                <div className="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-700 dark:text-gray-300 group-hover:scale-110 transition-transform">
+                  <Upload className="w-6 h-6" />
+                </div>
+                <div>
+                  <span className="text-sm font-bold text-zinc-900 dark:text-white block">
+                    Fotos & Videos hierher ziehen
+                  </span>
+                  <span className="text-xs text-zinc-500 dark:text-gray-400 block mt-0.5">
+                    Unterstützt Mehrfachauswahl: JPG, PNG, HEIC, MP4 & **Apple Live Photos (.mov)**
+                  </span>
+                </div>
+                <span className="btn-secondary py-1.5 px-4 text-xs font-bold mt-1">
+                  Dateien auswählen
+                </span>
+                <input 
+                  type="file" 
+                  multiple 
+                  accept="image/*,video/*,.heic,.mov" 
+                  onChange={handleMultipleFiles} 
+                  className="hidden" 
+                />
+              </label>
+            ) : (
               
-              {/* Material Badge Overlay */}
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                <span className="badge badge-concrete bg-black/80 text-white backdrop-blur-md border-white/20">
-                  {ART_MEDIUMS.find(m => m.id === medium)?.label}
-                </span>
-                <span className="text-[10px] text-gray-200 font-mono">
-                  Format: {postType === 'reel' ? 'Reel / Story (9:16)' : 'Feed Post (4:5)'}
-                </span>
-              </div>
-            </div>
+              /* Multi-Asset Gallery Grid */
+              <div className="flex flex-col gap-3">
+                <div className="grid grid-cols-3 gap-3">
+                  {uploadedAssets.map((asset, idx) => (
+                    <div 
+                      key={asset.id} 
+                      className="relative aspect-square rounded-xl overflow-hidden bg-zinc-900 border border-zinc-300 dark:border-zinc-700 group shadow-sm"
+                    >
+                      <img src={asset.url} alt={asset.name} className="w-full h-full object-cover" />
+                      
+                      {/* Badge for Type & Live Photo */}
+                      <div className="absolute top-1.5 left-1.5 flex flex-col gap-1">
+                        <span className="bg-black/75 backdrop-blur-md text-white text-[9px] font-mono px-1.5 py-0.5 rounded">
+                          #{idx + 1} {asset.type === 'video' ? 'VIDEO' : 'FOTO'}
+                        </span>
+                        {asset.isLivePhoto && (
+                          <span className="bg-amber-500 text-black text-[8px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1">
+                            <Film className="w-2.5 h-2.5" /> LIVE
+                          </span>
+                        )}
+                      </div>
 
-            {/* Custom Upload Drop Area */}
-            <label className="border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-500 dark:hover:border-yellow-400/60 rounded-xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all bg-zinc-50/50 dark:bg-zinc-950/50 hover:bg-zinc-100/50 dark:hover:bg-zinc-900/50">
-              <Upload className="w-5 h-5 text-zinc-500 dark:text-gray-400" />
-              <div className="text-center">
-                <span className="text-xs font-semibold text-zinc-800 dark:text-gray-200 block">Foto eines Werkstücks hochladen</span>
-                <span className="text-[10px] text-zinc-500 dark:text-gray-500">JPG, PNG oder MP4 (Beton, Metall, Leinwand)</span>
-              </div>
-              <input type="file" accept="image/*,video/*" onChange={handleFileUpload} className="hidden" />
-            </label>
+                      {/* Remove Button */}
+                      <button
+                        type="button"
+                        onClick={() => removeAsset(asset.id)}
+                        className="absolute top-1.5 right-1.5 bg-red-600/90 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110"
+                        title="Datei entfernen"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
 
-            {/* Quick Demo Presets */}
-            <div>
+                      <div className="absolute bottom-0 inset-x-0 bg-black/80 px-2 py-1 text-[9px] text-gray-300 truncate font-mono">
+                        {asset.name}
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Add More Assets Card */}
+                  <label className="aspect-square border-2 border-dashed border-zinc-300 dark:border-zinc-700 hover:border-zinc-900 dark:hover:border-yellow-400 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all bg-zinc-50 dark:bg-zinc-950/50 hover:bg-zinc-100 dark:hover:bg-zinc-900 text-zinc-500 dark:text-gray-400">
+                    <Plus className="w-6 h-6" />
+                    <span className="text-[10px] font-bold">Weitere hinzufügen</span>
+                    <input 
+                      type="file" 
+                      multiple 
+                      accept="image/*,video/*,.heic,.mov" 
+                      onChange={handleMultipleFiles} 
+                      className="hidden" 
+                    />
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {/* Quick Demo Asset Bundles */}
+            <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
               <span className="text-[11px] font-semibold text-zinc-500 dark:text-gray-400 uppercase tracking-wider block mb-2">
-                Oder Demo-Werkstück auswählen:
+                Oder Demo-Medienpaket laden:
               </span>
-              <div className="grid grid-cols-3 gap-2">
-                {PRESET_ARTWORKS.map((preset, idx) => (
+              <div className="flex flex-col gap-2">
+                {DEMO_ASSET_BUNDLES.map((bundle, idx) => (
                   <button
                     key={idx}
                     type="button"
-                    onClick={() => {
-                      setSelectedPresetUrl(preset.url);
-                      setMedium(preset.medium);
-                      setTitle(preset.title);
-                      setCustomFileUrl(null);
-                    }}
-                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedPresetUrl === preset.url && !customFileUrl 
-                        ? 'border-zinc-900 dark:border-yellow-400 scale-95 shadow-md' 
-                        : 'border-transparent opacity-60 hover:opacity-100'
-                    }`}
+                    onClick={() => loadDemoBundle(bundle)}
+                    className="text-left p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 bg-zinc-50 dark:bg-zinc-900/60 transition-all flex items-center justify-between"
                   >
-                    <img src={preset.url} alt={preset.title} className="w-full h-full object-cover" />
+                    <div>
+                      <span className="text-xs font-bold text-zinc-900 dark:text-white block">{bundle.title}</span>
+                      <span className="text-[10px] text-zinc-500 dark:text-gray-400">{bundle.assets.length} Medien-Dateien hinterlegt</span>
+                    </div>
+                    <Plus className="w-4 h-4 text-zinc-400" />
                   </button>
                 ))}
               </div>
@@ -191,8 +266,8 @@ export default function EditorialInput({ onNewPostCreated }) {
 
         </div>
 
-        {/* Right Column: Metadata Parameters (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col gap-6">
+        {/* Right Column: Parameters & Generation (6 cols) */}
+        <div className="lg:col-span-6 flex flex-col gap-6">
           
           <div className="glass-panel p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col gap-5">
             
@@ -217,12 +292,7 @@ export default function EditorialInput({ onNewPostCreated }) {
                 </label>
                 <select
                   value={medium}
-                  onChange={(e) => {
-                    setMedium(e.target.value);
-                    if (PRESET_IMAGES[e.target.value]) {
-                      setSelectedPresetUrl(PRESET_IMAGES[e.target.value]);
-                    }
-                  }}
+                  onChange={(e) => setMedium(e.target.value)}
                   className="input-studio w-full rounded-xl px-4 py-2.5 text-xs"
                 >
                   {ART_MEDIUMS.map(m => (
@@ -245,7 +315,7 @@ export default function EditorialInput({ onNewPostCreated }) {
                 className="input-studio w-full rounded-xl px-4 py-2.5 text-xs placeholder-zinc-400 dark:placeholder-gray-500 resize-none"
               />
               <span className="text-[10px] text-zinc-500 dark:text-gray-500 mt-1 block">
-                Tipp: Gemini nutzt diese Stichwörter zusammen mit der Bildanalyse für 3 nuancierte Text-Stile.
+                Tipp: Gemini analysiert alle hochgeladenen Dateien zusammen mit diesen Stichwörtern.
               </span>
             </div>
 
@@ -279,7 +349,7 @@ export default function EditorialInput({ onNewPostCreated }) {
               </div>
             </div>
 
-            {/* Format & Color Accent Selector */}
+            {/* Post Format & Color Accent Selector */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-zinc-200 dark:border-zinc-800">
               
               <div>
@@ -314,7 +384,7 @@ export default function EditorialInput({ onNewPostCreated }) {
 
               <div>
                 <label className="text-xs font-bold text-zinc-700 dark:text-gray-300 uppercase tracking-wider block mb-1.5">
-                  Akzentfarbe (für B&W-Bilder)
+                  Akzentfarbe (für S/W-Bilder)
                 </label>
                 <div className="flex items-center gap-2">
                   {['#E2F518', '#0A84FF', '#FF3B30', '#D4AF37', '#111116'].map((color) => (
@@ -343,12 +413,12 @@ export default function EditorialInput({ onNewPostCreated }) {
                 {isGenerating ? (
                   <>
                     <span className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
-                    <span>Gemini AI analysiert Kunstwerk & rendert 3 Varianten...</span>
+                    <span>Gemini AI kombiniert {uploadedAssets.length || 1} Medien & rendert 3 Varianten...</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-5 h-5" />
-                    <span>3 Post-Varianten jetzt generieren</span>
+                    <span>3 Post-Varianten aus Medienpool generieren</span>
                   </>
                 )}
               </button>
