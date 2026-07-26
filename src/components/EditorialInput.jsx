@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import { ART_MEDIUMS, generatePostVariants } from '../services/geminiCopilot';
-import { Upload, Sparkles, Image as ImageIcon, Video, Calendar, Tag, Layers, CheckCircle2, AlertCircle } from 'lucide-react';
+import { ART_MEDIUMS, PRESET_IMAGES, generatePostVariants } from '../services/geminiCopilot';
+import { Upload, Sparkles, Image as ImageIcon, Calendar, Tag } from 'lucide-react';
 
 const PRESET_ARTWORKS = [
   {
     title: 'Beton-Skulptur "STRUCTURE I"',
     medium: 'concrete',
-    url: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1000&q=80',
+    url: PRESET_IMAGES.concrete,
     desc: 'Rauer Gießbeton mit geometrischem Schattenwurf'
   },
   {
     title: 'Metall & Beton "SPATIAL BALANCE"',
     medium: 'mixed',
-    url: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80',
+    url: PRESET_IMAGES.metal,
     desc: 'Stahl-Installation auf schwerem Beton-Sockel'
   },
   {
     title: 'S/W Grafik "NOIR & NEON NO. 3"',
     medium: 'bw_painting',
-    url: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80',
+    url: PRESET_IMAGES.bw_painting,
     desc: 'Acryl auf Strukturleinwand mit leuchtendem Akzent'
   }
 ];
@@ -67,7 +67,6 @@ export default function EditorialInput({ onNewPostCreated }) {
     try {
       const newPost = await generatePostVariants(inputData);
       onNewPostCreated(newPost);
-      // Reset optional fields
       setTitle('');
       setKeywords('');
     } catch (err) {
@@ -83,25 +82,25 @@ export default function EditorialInput({ onNewPostCreated }) {
     <section className="max-w-6xl mx-auto px-4 py-8">
       
       {/* Intro Banner */}
-      <div className="glass-panel p-6 rounded-2xl mb-8 border border-zinc-800 bg-gradient-to-r from-zinc-900 via-zinc-900 to-black">
+      <div className="glass-panel p-6 rounded-2xl mb-8 border border-zinc-800 bg-gradient-to-r from-zinc-950 via-zinc-900 to-black">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-2">
               <span className="badge badge-concrete">Redaktionsplan Input</span>
               <span className="badge badge-accent">Susan Broy Ästhetik</span>
             </div>
-            <h1 className="font-heading text-2xl font-bold text-white tracking-wide">
+            <h1 className="font-heading text-2xl font-extrabold text-white tracking-tight">
               Neues Kunstwerk & Thema erfassen
             </h1>
-            <p className="text-xs text-gray-400 mt-1 max-w-2xl">
-              Geben Sie die Basisdaten für ein geplantes Posting ein (Beton-Skulpturen, Metall-Installationen oder S/W-Malereien). 
+            <p className="text-xs text-gray-400 mt-1 max-w-2xl leading-relaxed">
+              Erfassen Sie Werkdaten für Beton-Skulpturen, Metall-Installationen oder S/W-Malereien. 
               Google Gemini AI generiert daraus **3 hochwertige, komplett ausgearbeitete Varianten** zur Freigabe.
             </p>
           </div>
           <div className="text-right hidden md:block">
             <span className="text-xs text-gray-500 block">Status Ökosystem</span>
-            <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1.5 justify-end">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1.5 justify-end mt-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               Google AI Pro Ready
             </span>
           </div>
@@ -118,7 +117,7 @@ export default function EditorialInput({ onNewPostCreated }) {
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold uppercase tracking-wider text-gray-300 flex items-center gap-2">
                 <ImageIcon className="w-4 h-4 text-yellow-400" />
-                Medien-Vorschau (Foto / Video)
+                Medien-Vorschau (Kunstwerk Foto / Video)
               </label>
               {customFileUrl && (
                 <button
@@ -154,7 +153,7 @@ export default function EditorialInput({ onNewPostCreated }) {
             <label className="border-2 border-dashed border-zinc-700 hover:border-yellow-400/60 rounded-xl p-4 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all bg-zinc-950/50 hover:bg-zinc-900/50">
               <Upload className="w-5 h-5 text-gray-400" />
               <div className="text-center">
-                <span className="text-xs font-semibold text-gray-200 block">Eigenes Kunstwerk-Foto hochladen</span>
+                <span className="text-xs font-semibold text-gray-200 block">Foto eines Werkstücks hochladen</span>
                 <span className="text-[10px] text-gray-500">JPG, PNG oder MP4 (Beton, Metall, Leinwand)</span>
               </div>
               <input type="file" accept="image/*,video/*" onChange={handleFileUpload} className="hidden" />
@@ -163,7 +162,7 @@ export default function EditorialInput({ onNewPostCreated }) {
             {/* Quick Demo Presets */}
             <div>
               <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider block mb-2">
-                Oder Demo-Kunstwerk wählen:
+                Oder Demo-Werkstück auswählen:
               </span>
               <div className="grid grid-cols-3 gap-2">
                 {PRESET_ARTWORKS.map((preset, idx) => (
@@ -192,7 +191,7 @@ export default function EditorialInput({ onNewPostCreated }) {
 
         </div>
 
-        {/* Right Column: Metadata & Generating Parameters (7 cols) */}
+        {/* Right Column: Metadata Parameters (7 cols) */}
         <div className="lg:col-span-7 flex flex-col gap-6">
           
           <div className="glass-panel p-6 rounded-2xl border border-zinc-800 flex flex-col gap-5">
@@ -218,7 +217,12 @@ export default function EditorialInput({ onNewPostCreated }) {
                 </label>
                 <select
                   value={medium}
-                  onChange={(e) => setMedium(e.target.value)}
+                  onChange={(e) => {
+                    setMedium(e.target.value);
+                    if (PRESET_IMAGES[e.target.value]) {
+                      setSelectedPresetUrl(PRESET_IMAGES[e.target.value]);
+                    }
+                  }}
                   className="w-full bg-zinc-900 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none transition-all"
                 >
                   {ART_MEDIUMS.map(m => (
@@ -228,7 +232,7 @@ export default function EditorialInput({ onNewPostCreated }) {
               </div>
             </div>
 
-            {/* Keywords & Tone Guidance */}
+            {/* Keywords */}
             <div>
               <label className="text-xs font-bold text-gray-300 uppercase tracking-wider block mb-1.5">
                 Stichwörter & Beschriftungs-Impulse
@@ -237,7 +241,7 @@ export default function EditorialInput({ onNewPostCreated }) {
                 value={keywords}
                 onChange={(e) => setKeywords(e.target.value)}
                 rows={3}
-                placeholder="z.B. Raues Mineral, tiefe Lichtschatten, Form im Raum, Ausstellung bei Galerie von&von"
+                placeholder="z.B. Raues Mineral, tiefe Lichtschatten, Form im Raum, Galerie von&von"
                 className="w-full bg-zinc-900 border border-zinc-700 focus:border-yellow-400 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none transition-all resize-none"
               />
               <span className="text-[10px] text-gray-500 mt-1 block">
@@ -245,7 +249,7 @@ export default function EditorialInput({ onNewPostCreated }) {
               </span>
             </div>
 
-            {/* Tagged Accounts & Hashtag Prefixes */}
+            {/* Tagged Accounts & Date */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-xs font-bold text-gray-300 uppercase tracking-wider block mb-1.5 flex items-center gap-1.5">
