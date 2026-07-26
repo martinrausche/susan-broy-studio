@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { CONTENT_CATEGORIES, ART_MEDIUMS, PRESET_IMAGES, generatePostVariants } from '../services/geminiCopilot';
-import { Upload, Sparkles, Image as ImageIcon, Calendar, Tag, MapPin, Clock, Trash2, Plus, Film } from 'lucide-react';
+import { CONTENT_CATEGORIES, LANGUAGES, ART_MEDIUMS, PRESET_IMAGES, generatePostVariants } from '../services/geminiCopilot';
+import { Upload, Sparkles, Image as ImageIcon, Calendar, Tag, MapPin, Clock, Trash2, Plus, Film, Globe } from 'lucide-react';
 
 export default function EditorialInput({ onNewPostCreated }) {
   const [category, setCategory] = useState('artwork');
+  const [language, setLanguage] = useState('de'); // 'de', 'en', 'bilingual'
   const [title, setTitle] = useState('');
   const [medium, setMedium] = useState('concrete');
   const [location, setLocation] = useState('Galerie von&von, Nürnberg');
@@ -60,6 +61,7 @@ export default function EditorialInput({ onNewPostCreated }) {
 
     const inputData = {
       category,
+      language,
       title: title || (category === 'exhibition' ? 'Ausstellung "SPATIAL PRESENCE"' : category === 'atelier' ? 'Atelier Einblick' : 'Kunstwerk ohne Titel'),
       medium,
       location,
@@ -95,21 +97,21 @@ export default function EditorialInput({ onNewPostCreated }) {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="badge badge-concrete">Redaktionsplan Input</span>
-              <span className="badge badge-accent">Flexible Post-Kategorien</span>
+              <span className="badge badge-accent">Mehrsprachig (DE / EN)</span>
             </div>
             <h1 className="font-heading text-2xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
               Neues Posting erfassen
             </h1>
             <p className="text-xs text-zinc-600 dark:text-gray-400 mt-1 max-w-2xl leading-relaxed">
-              Wählen Sie den Thema-Typ (z.B. **Ausstellung & Vernissage**, **Atelier-Einblick** oder **Kunstwerk**).
-              Gemini AI passt Text-Stil und Details automatisch an.
+              Wählen Sie Thema und Sprache (**Deutsch**, **English** oder **Zweisprachig** für internationale Follower).
+              Gemini AI generiert daraus 3 Reel-Varianten mit eingebrannten Video-Texten.
             </p>
           </div>
           <div className="text-right hidden md:block">
             <span className="text-xs text-zinc-500 dark:text-gray-500 block">Status Ökosystem</span>
             <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 justify-end mt-1">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              Editorial Engine Ready
+              Multi-Language Ready
             </span>
           </div>
         </div>
@@ -117,28 +119,58 @@ export default function EditorialInput({ onNewPostCreated }) {
 
       <form onSubmit={handleGenerate} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* Category Selection Tabs */}
-        <div className="lg:col-span-12 flex flex-col gap-3">
-          <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300">
-            1. Kategorie / Art des Postings wählen:
-          </label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            {CONTENT_CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setCategory(cat.id)}
-                className={`p-4 rounded-xl border text-left transition-all flex flex-col gap-1.5 ${
-                  category === cat.id
-                    ? 'bg-zinc-900 text-white dark:bg-zinc-800 dark:border-white dark:text-white border-zinc-900 shadow-md scale-[1.02]'
-                    : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-gray-300 hover:border-zinc-400 dark:hover:border-zinc-700'
-                }`}
-              >
-                <span className="text-sm font-bold block">{cat.label}</span>
-                <span className="text-[11px] opacity-75 leading-relaxed">{cat.desc}</span>
-              </button>
-            ))}
+        {/* Category & Language Selection Grid (Full Width 12 Cols) */}
+        <div className="lg:col-span-12 flex flex-col gap-5">
+          
+          {/* Category Selector */}
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300">
+              1. Kategorie des Postings wählen:
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {CONTENT_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setCategory(cat.id)}
+                  className={`p-4 rounded-xl border text-left transition-all flex flex-col gap-1.5 ${
+                    category === cat.id
+                      ? 'bg-zinc-900 text-white dark:bg-zinc-800 dark:border-white dark:text-white border-zinc-900 shadow-md scale-[1.02]'
+                      : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-gray-300 hover:border-zinc-400 dark:hover:border-zinc-700'
+                  }`}
+                >
+                  <span className="text-sm font-bold block">{cat.label}</span>
+                  <span className="text-[11px] opacity-75 leading-relaxed">{cat.desc}</span>
+                </button>
+              ))}
+            </div>
           </div>
+
+          {/* Language Selector */}
+          <div className="flex flex-col gap-2 pt-2 border-t border-zinc-200 dark:border-zinc-800">
+            <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5 text-blue-500" />
+              2. Sprache für Text & Video-Overlays wählen:
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {LANGUAGES.map((lang) => (
+                <button
+                  key={lang.id}
+                  type="button"
+                  onClick={() => setLanguage(lang.id)}
+                  className={`p-3 rounded-xl border text-left transition-all flex flex-col gap-1 ${
+                    language === lang.id
+                      ? 'bg-zinc-900 text-white dark:bg-zinc-800 dark:border-white dark:text-white border-zinc-900 shadow-sm'
+                      : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-gray-300 hover:border-zinc-400'
+                  }`}
+                >
+                  <span className="text-xs font-bold block">{lang.label}</span>
+                  <span className="text-[10px] opacity-75">{lang.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
         </div>
 
         {/* Left Column: Multi-Asset Upload Vault (6 cols) */}
@@ -249,7 +281,7 @@ export default function EditorialInput({ onNewPostCreated }) {
           <div className="glass-panel p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col gap-5">
             
             <span className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-              2. Details für {CONTENT_CATEGORIES.find(c => c.id === category)?.label}:
+              3. Details für {CONTENT_CATEGORIES.find(c => c.id === category)?.label} ({LANGUAGES.find(l => l.id === language)?.label}):
             </span>
 
             {/* Title */}
@@ -327,18 +359,16 @@ export default function EditorialInput({ onNewPostCreated }) {
             {/* Keywords */}
             <div>
               <label className="text-xs font-bold text-zinc-700 dark:text-gray-300 uppercase tracking-wider block mb-1.5">
-                Stichwörter & Beschriftungs-Impulse
+                Stichwörter & Beschriftungs-Impulse ({language.toUpperCase()})
               </label>
               <textarea
                 value={keywords}
                 onChange={(e) => setKeywords(e.target.value)}
                 rows={3}
                 placeholder={
-                  category === 'exhibition'
-                    ? 'z.B. Vernissage-Einladung, Ausstellungsaufbau, Katalog-Präsentation'
-                    : category === 'atelier'
-                    ? 'z.B. Gussformen, Licht im Atelier, rohe Haptik, Gauting'
-                    : 'z.B. Raues Mineral, tiefe Lichtschatten, Form im Raum'
+                  language === 'en'
+                    ? 'e.g. Form in space, quiet presence, raw concrete texture, exhibition opening'
+                    : 'z.B. Form im Raum, Stille der Skulptur, Vernissage-Einladung, rauer Beton'
                 }
                 className="input-studio w-full rounded-xl px-4 py-2.5 text-xs placeholder-zinc-400 dark:placeholder-gray-500 resize-none"
               />
@@ -438,12 +468,12 @@ export default function EditorialInput({ onNewPostCreated }) {
                 {isGenerating ? (
                   <>
                     <span className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
-                    <span>Gemini AI generiert 3 Vorschläge für {CONTENT_CATEGORIES.find(c => c.id === category)?.label}...</span>
+                    <span>Gemini AI generiert 3 Vorschläge ({LANGUAGES.find(l => l.id === language)?.label})...</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-5 h-5" />
-                    <span>3 Post-Varianten generieren</span>
+                    <span>3 Post-Varianten generieren ({LANGUAGES.find(l => l.id === language)?.label})</span>
                   </>
                 )}
               </button>
