@@ -26,21 +26,21 @@ function LoginContent() {
   return (
     <main className="min-h-screen bg-[#0C0C0E] text-white flex items-center justify-center p-6 font-sans">
       
-      {/* Central Login Card matching Websiteupdater Susan Broy 1:1 */}
+      {/* Central Login Card matching Websiteupdater Susan Broy 1:1 with Instagram Gradient Logo accent */}
       <div className="w-full max-w-[420px] bg-[#161618] p-10 rounded-2xl border border-[#26262A] shadow-2xl flex flex-col items-center gap-6 text-center">
         
-        {/* BROY Official Logo */}
-        <BroyLogo size={64} color="#FFFFFF" />
+        {/* BROY Logo with Instagram Signature Gradient */}
+        <BroyLogo size={64} variant="instagram" />
 
         {/* Title Block */}
         <div className="flex flex-col items-center">
           <h1 className="text-xl font-extrabold tracking-[0.2em] text-white uppercase">
             SUSAN BROY
           </h1>
-          <span className="text-xs text-gray-400 font-light mt-1 tracking-wider">
-            Instagram Content Studio
+          <span className="text-xs text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-amber-400 font-bold mt-1 tracking-wider">
+            Instagram Studio
           </span>
-          <div className="w-10 h-[1.5px] bg-gray-600 mt-4" />
+          <div className="w-10 h-[1.5px] bg-gradient-to-r from-purple-500 to-amber-500 mt-4" />
         </div>
 
         {/* Section Heading */}
@@ -61,7 +61,7 @@ function LoginContent() {
           </div>
         )}
 
-        {/* Google Login Button matching Websiteupdater 1:1 */}
+        {/* Google Login Button */}
         <a
           href="/api/auth/google"
           className="w-full bg-[#DCE1E7] hover:bg-[#E5E9EF] text-[#111827] py-3.5 px-6 rounded-xl font-bold flex items-center justify-center gap-3 text-xs tracking-wide transition-all shadow-md no-underline border-none mt-2"

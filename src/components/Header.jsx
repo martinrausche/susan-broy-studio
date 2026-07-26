@@ -3,9 +3,7 @@ import BroyLogo from './BroyLogo';
 import ThemeToggle from './ThemeToggle';
 import { Sparkles, Calendar, Layers, Instagram, LogOut } from 'lucide-react';
 
-export default function Header({ activeTab, setActiveTab, pendingCount, theme, setTheme, isDark }) {
-  const logoColor = isDark ? '#FFFFFF' : '#000000';
-
+export default function Header({ activeTab, setActiveTab, pendingCount, theme, setTheme }) {
   return (
     <header className="glass-panel sticky top-0 z-50 px-4 sm:px-6 py-3.5 transition-colors">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
@@ -13,16 +11,18 @@ export default function Header({ activeTab, setActiveTab, pendingCount, theme, s
         {/* Top Mobile Bar: Logo & Actions */}
         <div className="w-full md:w-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('input')}>
-            <BroyLogo size={36} color={logoColor} />
+            <BroyLogo size={38} variant="instagram" />
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-heading text-base sm:text-lg font-bold tracking-wider text-zinc-900 dark:text-white">
                   SUSAN BROY
                 </span>
-                <span className="badge badge-accent text-[9px] px-1.5 py-0.5">Studio</span>
+                <span className="badge bg-gradient-to-r from-purple-600 via-pink-600 to-amber-500 text-white text-[9px] px-2 py-0.5 font-bold shadow-sm">
+                  Instagram Studio
+                </span>
               </div>
               <span className="text-[10px] text-zinc-500 dark:text-gray-400 tracking-widest uppercase font-medium">
-                Gauting • Instagram
+                Gauting • Content Engine
               </span>
             </div>
           </div>
