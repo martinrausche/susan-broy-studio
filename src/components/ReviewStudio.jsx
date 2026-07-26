@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import InstagramSimulator from './InstagramSimulator';
 import BroyLogo from './BroyLogo';
 import { REEL_TRANSITION_EFFECTS } from '../services/geminiCopilot';
-import { Layers, CheckCircle2, Edit3, Music, Tag, Calendar, Sparkles, Save, ShieldCheck, Film, Type, Sliders, Eye, EyeOff } from 'lucide-react';
+import { Layers, CheckCircle2, Edit3, Music, Tag, Calendar, Sparkles, Save, ShieldCheck, Film, Type, Sliders, Eye } from 'lucide-react';
 
 const AUDIO_PRESETS = [
   'Ambient Calm — Deep Resonance (Slow & Cinematic)',
@@ -10,12 +10,6 @@ const AUDIO_PRESETS = [
   'Natural Studio Acoustics — Quiet Space (Atelier)',
   'Minimalist Piano — Spatial Echo',
   'Ohne Musik (Nur Video-Ton)'
-];
-
-const OVERLAY_POSITIONS = [
-  { id: 'bottom_bar', name: 'Dezenter Banner am unteren Bildrand' },
-  { id: 'top_left', name: 'Schlichter Eck-Titel oben links' },
-  { id: 'none', name: 'Kein Text im Video (Nur Wasserzeichen)' }
 ];
 
 export default function ReviewStudio({ posts, onApprovePost }) {
@@ -26,15 +20,15 @@ export default function ReviewStudio({ posts, onApprovePost }) {
   
   const currentVariant = selectedPost?.variants[selectedVariantIdx] || selectedPost?.variants[0];
   
-  // Editable State (Strict Zero-Invention Rule)
+  // Editable State (Strict Zero-Invention Rule & High Creativity Controls)
   const [editedCaption, setEditedCaption] = useState(currentVariant?.caption || '');
   const [editedOverlayText, setEditedOverlayText] = useState(currentVariant?.overlayText || '');
-  const [selectedOverlayPosition, setSelectedOverlayPosition] = useState(currentVariant?.overlayPosition || 'bottom_bar');
+  const [textColor, setTextColor] = useState(currentVariant?.textColor || 'black'); // 'black' for white bg, 'white' for dark bg
   const [selectedTransition, setSelectedTransition] = useState(currentVariant?.transitionEffect || 'zoom_pan');
   const [selectedAudio, setSelectedAudio] = useState(currentVariant?.audio || AUDIO_PRESETS[0]);
   
   // Watermark Settings (Subtle Monochrome Transparent)
-  const [watermarkColor, setWatermarkColor] = useState('white'); // 'white' or 'black'
+  const [watermarkColor, setWatermarkColor] = useState('white');
   const [watermarkOpacity, setWatermarkOpacity] = useState(0.55);
 
   if (!selectedPost) {
@@ -56,7 +50,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
     const targetVar = selectedPost.variants[idx];
     setEditedCaption(targetVar.caption);
     setEditedOverlayText(targetVar.overlayText || '');
-    setSelectedOverlayPosition(targetVar.overlayPosition || 'bottom_bar');
+    setTextColor(targetVar.textColor || 'black');
     setSelectedTransition(targetVar.transitionEffect || 'zoom_pan');
     setSelectedAudio(targetVar.audio || AUDIO_PRESETS[0]);
   };
@@ -71,7 +65,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
       ...currentVariant,
       caption: editedCaption,
       overlayText: editedOverlayText,
-      overlayPosition: selectedOverlayPosition,
+      textColor,
       transitionEffect: selectedTransition,
       audio: selectedAudio
     };
@@ -87,14 +81,14 @@ export default function ReviewStudio({ posts, onApprovePost }) {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="badge badge-accent">Instagram Reel Studio</span>
-            <span className="badge badge-concrete">Keine erfundenen Inhalte</span>
+            <span className="badge badge-accent">Kinetisches Reel Studio</span>
+            <span className="badge badge-concrete">Direkte Video-Typografie</span>
           </div>
           <h1 className="font-heading text-2xl font-bold text-zinc-900 dark:text-white tracking-wide">
-            Reel-Effekte, Wasserzeichen & Texte anpassen
+            Kinetische Texte, Effekte & Wasserzeichen
           </h1>
           <p className="text-xs text-zinc-600 dark:text-gray-400 mt-0.5">
-            Wählen Sie Kameraschwenks & Übergänge, steuern Sie das dezente Wasserzeichen und passen Sie Texte exakt an.
+            Texte werden mit **Fade- & Zoom-Animationen direkt im Video** eingeblendet (Schwarz auf hellen Stellen / Weiß auf dunklen Stellen).
           </p>
         </div>
 
@@ -137,7 +131,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
           {/* 3 Reel Variants Selector */}
           <div className="flex flex-col gap-3">
             <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-gray-400">
-              3 Generierte Reel-Vorschläge:
+              3 Kinetische Reel-Stile:
             </label>
 
             <div className="grid grid-cols-1 gap-3">
@@ -167,7 +161,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                   {v.overlayText && (
                     <div className="bg-zinc-100 dark:bg-zinc-950/80 p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 my-1">
                       <span className="text-[10px] font-mono text-zinc-700 dark:text-gray-300 block truncate">
-                        Text im Bild: "{v.overlayText.slice(0, 50)}..."
+                        Kinetischer Video-Text: "{v.overlayText.replace(/\n/g, ' • ')}"
                       </span>
                     </div>
                   )}
@@ -175,7 +169,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-800/60 text-[10px] text-zinc-500 dark:text-gray-400">
                     <span className="flex items-center gap-1 font-medium">
                       <Film className="w-3 h-3 text-amber-500" />
-                      {v.transitionEffect === 'zoom_pan' ? 'Zoom & Schwenk' : v.transitionEffect === 'light_fade' ? 'Crossfade' : 'Horizontal Slide'}
+                      {v.transitionEffect === 'zoom_pan' ? 'Raum-Zoom & Kameraschwenk' : 'Licht-Crossfade'}
                     </span>
                     <span className="flex items-center gap-1 text-purple-600 dark:text-purple-400 font-medium">
                       <Music className="w-3 h-3" />
@@ -187,14 +181,61 @@ export default function ReviewStudio({ posts, onApprovePost }) {
             </div>
           </div>
 
-          {/* Reel Video Controls */}
+          {/* Reel Controls Form */}
           <div className="glass-panel p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col gap-5">
             
-            {/* 1. Kameraschwenks & Übergangseffekte */}
+            {/* 1. Kinetischer Video-Text & Farbe */}
             <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-2">
+                  <Type className="w-4 h-4 text-blue-500" />
+                  1. Kinetischer Video-Text (Zeilen faden & zoomen rhythmisch ein):
+                </label>
+
+                {/* Text Color Toggle: Black on White vs White on Black */}
+                <div className="flex items-center gap-1.5 bg-zinc-100 dark:bg-zinc-900 p-1 rounded-lg border border-zinc-200 dark:border-zinc-800">
+                  <button
+                    type="button"
+                    onClick={() => setTextColor('black')}
+                    className={`px-2.5 py-1 rounded text-[10px] font-bold transition-all ${
+                      textColor === 'black'
+                        ? 'bg-black text-white shadow-sm'
+                        : 'text-zinc-600 dark:text-gray-400'
+                    }`}
+                  >
+                    ⚫ Schwarz (auf hellen Stellen)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTextColor('white')}
+                    className={`px-2.5 py-1 rounded text-[10px] font-bold transition-all ${
+                      textColor === 'white'
+                        ? 'bg-white text-black shadow-sm'
+                        : 'text-zinc-600 dark:text-gray-400'
+                    }`}
+                  >
+                    ⚪ Weiß (auf dunklen Stellen)
+                  </button>
+                </div>
+              </div>
+
+              <textarea
+                value={editedOverlayText}
+                onChange={(e) => setEditedOverlayText(e.target.value)}
+                rows={3}
+                className="input-studio w-full rounded-xl p-3 text-xs leading-relaxed font-mono resize-none border-blue-500/40"
+                placeholder="Jede Zeile wird nacheinander dynamisch im Video eingeblendet..."
+              />
+              <span className="text-[10px] text-zinc-500 dark:text-gray-500 mt-1 block">
+                Tipp: Jede neue Zeile wird im Video als eigener animierter Impuls gefadet und gezoomt!
+              </span>
+            </div>
+
+            {/* 2. Kameraschwenks & Übergangseffekte */}
+            <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
               <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-2 mb-2">
                 <Film className="w-4 h-4 text-amber-500" />
-                1. Kameraschwenk & Video-Übergangseffekt wählen:
+                2. Kamera-Bewegung & Video-Dynamik wählen:
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {REEL_TRANSITION_EFFECTS.map((eff) => (
@@ -215,11 +256,11 @@ export default function ReviewStudio({ posts, onApprovePost }) {
               </div>
             </div>
 
-            {/* 2. Dezentes Wasserzeichen-Logo (Schwarz / Weiß & Transparenz) */}
+            {/* 3. Wasserzeichen-Logo Controls */}
             <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
               <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-2 mb-2">
                 <BroyLogo size={14} color="currentColor" />
-                2. BROY Wasserzeichen-Logo (Keine Farben, schlicht & transparent):
+                3. BROY Wasserzeichen-Logo (Schlicht & transparent):
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
                 <div className="flex items-center gap-2">
@@ -233,7 +274,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                         : 'bg-zinc-800 text-white border-zinc-700 opacity-60'
                     }`}
                   >
-                    ⚪ Weiß (Transparent)
+                    ⚪ Weiß
                   </button>
                   <button
                     type="button"
@@ -244,12 +285,12 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                         : 'bg-zinc-200 text-black border-zinc-300 opacity-60'
                     }`}
                   >
-                    ⚫ Schwarz (Transparent)
+                    ⚫ Schwarz
                   </button>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-zinc-600 dark:text-gray-400">Transparenz:</span>
+                  <span className="text-xs text-zinc-600 dark:text-gray-400">Deckkraft:</span>
                   <input 
                     type="range" 
                     min="0.2" 
@@ -262,41 +303,6 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                   <span className="text-xs font-mono w-10 text-right">{Math.round(watermarkOpacity * 100)}%</span>
                 </div>
               </div>
-            </div>
-
-            {/* 3. Text im Video Position & Text */}
-            <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
-              <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-2 mb-2">
-                <Type className="w-4 h-4 text-blue-500" />
-                3. Text im Video Positionieren (Dezent & Randbündig):
-              </label>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
-                {OVERLAY_POSITIONS.map((pos) => (
-                  <button
-                    key={pos.id}
-                    type="button"
-                    onClick={() => setSelectedOverlayPosition(pos.id)}
-                    className={`p-2 rounded-lg text-xs font-semibold border text-center transition-all ${
-                      selectedOverlayPosition === pos.id
-                        ? 'bg-zinc-900 text-white dark:bg-white dark:text-black border-zinc-900'
-                        : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-gray-400'
-                    }`}
-                  >
-                    {pos.name}
-                  </button>
-                ))}
-              </div>
-
-              {selectedOverlayPosition !== 'none' && (
-                <textarea
-                  value={editedOverlayText}
-                  onChange={(e) => setEditedOverlayText(e.target.value)}
-                  rows={2}
-                  className="input-studio w-full rounded-xl p-3 text-xs leading-relaxed font-mono resize-none"
-                  placeholder="Text der im Video gezeigt wird..."
-                />
-              )}
             </div>
 
             {/* 4. Soundtrack Selector */}
@@ -356,8 +362,8 @@ export default function ReviewStudio({ posts, onApprovePost }) {
         {/* Right 5 Columns: Dynamic Animated Reel Simulator with Live In-Video Text */}
         <div className="lg:col-span-5 flex flex-col items-center justify-start sticky top-24">
           <div className="text-center mb-3">
-            <span className="badge badge-concrete">Echte Reel Video-Vorschau</span>
-            <p className="text-[11px] text-zinc-500 dark:text-gray-400 mt-1">Gleitende Kameraschwenks & Wasserzeichen</p>
+            <span className="badge badge-concrete">Kinetische Video-Typografie</span>
+            <p className="text-[11px] text-zinc-500 dark:text-gray-400 mt-1">Einfaden & Zoom-Effekt direkt auf dem Videoclip</p>
           </div>
 
           <InstagramSimulator 
@@ -366,7 +372,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
               ...currentVariant,
               caption: editedCaption,
               overlayText: editedOverlayText,
-              overlayPosition: selectedOverlayPosition,
+              textColor,
               transitionEffect: selectedTransition,
               audio: selectedAudio
             }}

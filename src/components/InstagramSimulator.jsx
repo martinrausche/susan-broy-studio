@@ -1,37 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import BroyLogo from './BroyLogo';
-import { Heart, MessageCircle, Send, Bookmark, Music, Volume2, VolumeX, Play, Pause, ChevronLeft, ChevronRight, Sparkles, Sliders } from 'lucide-react';
+import { Heart, MessageCircle, Send, Bookmark, Music, Volume2, VolumeX, Play, Pause, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
 export default function InstagramSimulator({ post, variant, watermarkColor = 'white', watermarkOpacity = 0.55 }) {
   const [currentSlideIdx, setCurrentSlideIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [transitionProgress, setTransitionProgress] = useState(0);
+  const [textPhase, setTextPhase] = useState(0);
 
   const assetList = post?.assetList && post.assetList.length > 0
     ? post.assetList
     : [{ id: '1', url: post?.mediaUrl || '', type: 'image' }];
 
   const currentAsset = assetList[currentSlideIdx % assetList.length];
-  const nextAsset = assetList[(currentSlideIdx + 1) % assetList.length];
 
   const transitionEffect = variant?.transitionEffect || 'zoom_pan';
-  const overlayPosition = variant?.overlayPosition || 'bottom_bar';
-  const overlayText = variant?.overlayText || '';
+  const overlayText = variant?.overlayText || post?.title || 'SUSAN BROY';
+  const textColor = variant?.textColor || 'black'; // 'black' or 'white'
+  const textAnimation = variant?.textAnimation || 'kinetic_bounce'; // 'kinetic_bounce', 'fade_zoom', 'staggered_type'
 
-  // Reel Motion Loop with Smooth Transitions
+  // Text Lines Split for Kinetic Animation Phases
+  const textLines = overlayText.split('\n').filter(Boolean);
+
+  // Kinetic Text Animation Phase Loop
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    const textInterval = setInterval(() => {
+      setTextPhase(prev => (prev + 1) % Math.max(1, textLines.length));
+    }, 2200); // Shift text phrase every 2.2 seconds for dynamic rhythm
+
+    return () => clearInterval(textInterval);
+  }, [isPlaying, textLines.length]);
+
+  // Reel Slide Auto-Advance Loop
   useEffect(() => {
     if (!isPlaying || assetList.length <= 1) return;
 
     const slideTimer = setInterval(() => {
-      // Trigger transition animation
-      setTransitionProgress(1);
-      setTimeout(() => {
-        setCurrentSlideIdx(prev => (prev + 1) % assetList.length);
-        setTransitionProgress(0);
-      }, 600); // 600ms transition fade/slide
-    }, 3800);
+      setCurrentSlideIdx(prev => (prev + 1) % assetList.length);
+    }, 4500);
 
     return () => clearInterval(slideTimer);
   }, [isPlaying, assetList.length]);
@@ -51,81 +60,83 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
             </div>
             <div>
               <span className="text-[11px] font-bold text-white block leading-none">syken_broy</span>
-              <span className="text-[9px] text-gray-400">Atelier Gauting • Original Reel</span>
+              <span className="text-[9px] text-gray-400">Atelier Gauting • Kinetic Reel</span>
             </div>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="bg-white/15 text-white text-[9px] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">
-              {transitionEffect === 'zoom_pan' ? 'ZOOM & SCHWENK' : transitionEffect === 'light_fade' ? 'CROSSFADE' : 'SLIDE'}
+            <span className="bg-white/20 text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
+              KINETIC MOTION
             </span>
           </div>
         </div>
 
-        {/* Video Reel Player Canvas */}
-        <div className="relative flex-1 bg-black overflow-hidden flex items-center justify-center group">
+        {/* Video Reel Player Canvas with High-Creativity In-Video Text */}
+        <div className="relative flex-1 bg-zinc-950 overflow-hidden flex items-center justify-center group">
           
-          {/* Active Asset Image with Ken-Burns Motion Animation */}
+          {/* Active Asset Image with Continuous Dynamic Motion */}
           <div className="relative w-full h-full overflow-hidden">
             <img
               src={currentAsset.url}
               alt="Reel Active Media"
-              className={`w-full h-full object-cover transition-all duration-[3800ms] ease-linear ${
+              className={`w-full h-full object-cover transition-transform duration-[4500ms] ease-out ${
                 isPlaying && transitionEffect === 'zoom_pan'
-                  ? 'scale-115 translate-x-2 translate-y-1'
+                  ? 'scale-125 translate-x-2 -translate-y-2'
                   : isPlaying && transitionEffect === 'light_fade'
-                  ? 'scale-105 filter brightness-105'
-                  : 'scale-100'
-              } ${
-                transitionProgress > 0 && transitionEffect === 'light_fade'
-                  ? 'opacity-30 blur-sm transition-opacity duration-500'
-                  : transitionProgress > 0 && transitionEffect === 'slide_push'
-                  ? '-translate-x-full transition-transform duration-500'
-                  : 'opacity-100 translate-x-0'
+                  ? 'scale-110 rotate-1'
+                  : 'scale-105'
               }`}
             />
             
-            {/* Transition Overlay (Next Slide Incoming) */}
-            {transitionProgress > 0 && assetList.length > 1 && (
-              <img
-                src={nextAsset.url}
-                alt="Reel Incoming Media"
-                className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
-                  transitionEffect === 'slide_push'
-                    ? 'translate-x-0'
-                    : 'opacity-100'
-                }`}
-              />
+            {/* Dynamic Studio Lighting Animation */}
+            {isPlaying && (
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-white/20 animate-pulse duration-[2500ms] pointer-events-none" />
             )}
 
-            {/* Dark Vignette Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
+            {/* Subtle Vignette Overlay for Depth */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
 
             {/* ========================================================================= */}
-            {/* SUBTLE TRANSPARENT WATERMARK LOGO (Pure Monochrome - No colorful BROY text) */}
+            {/* SUBTLE MONOCHROME TRANSPARENT WATERMARK (No boxes, pure architectural logo) */}
             {/* ========================================================================= */}
-            <div className="absolute top-4 right-4 z-20 pointer-events-none transition-opacity duration-300" style={{ opacity: watermarkOpacity }}>
+            <div className="absolute top-4 right-4 z-20 pointer-events-none" style={{ opacity: watermarkOpacity }}>
               <BroyLogo size={32} color={watermarkColor === 'black' ? '#000000' : '#FFFFFF'} />
             </div>
 
             {/* ========================================================================= */}
-            {/* IN-VIDEO TEXT OVERLAYS (Positioned cleanly without obscuring artwork) */}
+            {/* HIGH-CREATIVITY KINETIC IN-VIDEO TYPOGRAPHY (No heavy backgrounds!) */}
+            {/* Directly projected onto artwork/background with dynamic Zoom & Fade */}
             {/* ========================================================================= */}
-            {overlayPosition === 'bottom_bar' && overlayText && (
-              /* Style A: Subtle Dark Banner at the Bottom */
-              <div className="absolute bottom-16 inset-x-3 bg-black/75 backdrop-blur-md px-3.5 py-2.5 rounded-xl border border-white/15 text-white z-30 shadow-lg">
-                <pre className="whitespace-pre-wrap font-sans text-[11px] font-medium leading-relaxed tracking-wide text-gray-100">
-                  {overlayText}
-                </pre>
-              </div>
-            )}
 
-            {overlayPosition === 'top_left' && overlayText && (
-              /* Style B: Top-Left Minimalist Header */
-              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-2 rounded-lg border border-white/15 text-white z-30">
-                <pre className="whitespace-pre-wrap font-heading text-[10px] font-bold tracking-widest text-white uppercase">
-                  {overlayText}
-                </pre>
+            {textLines.length > 0 && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 pointer-events-none z-30 text-center">
+                {textLines.map((line, idx) => {
+                  const isActive = idx === (textPhase % textLines.length);
+
+                  return (
+                    <div
+                      key={idx}
+                      className={`transition-all duration-700 transform ${
+                        isActive
+                          ? 'opacity-100 scale-105 translate-y-0 filter drop-shadow-lg'
+                          : 'opacity-0 scale-95 translate-y-4 pointer-events-none absolute'
+                      }`}
+                    >
+                      <h2 
+                        style={{ color: textColor === 'black' ? '#000000' : '#FFFFFF' }}
+                        className={`font-heading font-black uppercase tracking-widest leading-tight ${
+                          line.length < 20 ? 'text-xl sm:text-2xl' : 'text-sm sm:text-base'
+                        } ${
+                          textColor === 'black'
+                            ? 'drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]'
+                            : 'drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]'
+                        }`}
+                      >
+                        {line}
+                      </h2>
+                    </div>
+                  );
+                })}
               </div>
             )}
 
@@ -145,7 +156,7 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
                 <div key={idx} className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
                   <div 
                     className={`h-full bg-white transition-all duration-300 ${
-                      currentSlideIdx === idx ? (isPlaying ? 'w-full transition-all duration-[3800ms] ease-linear' : 'w-full') : (currentSlideIdx > idx ? 'w-full' : 'w-0')
+                      currentSlideIdx === idx ? (isPlaying ? 'w-full transition-all duration-[4500ms] ease-linear' : 'w-full') : (currentSlideIdx > idx ? 'w-full' : 'w-0')
                     }`}
                   />
                 </div>
