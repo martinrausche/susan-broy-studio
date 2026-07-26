@@ -1,6 +1,6 @@
 import React from 'react';
 import BroyLogo from './BroyLogo';
-import { Calendar as CalendarIcon, CheckCircle2, Clock, Instagram, Sparkles, Send, Download } from 'lucide-react';
+import { Calendar as CalendarIcon, CheckCircle2, Clock, Download } from 'lucide-react';
 
 export default function CalendarView({ posts }) {
   const approvedCount = posts.filter(p => p.status === 'approved').length;
@@ -10,41 +10,41 @@ export default function CalendarView({ posts }) {
     <section className="max-w-6xl mx-auto px-4 py-8">
       
       {/* Top Summary Banner */}
-      <div className="glass-panel p-6 rounded-2xl mb-8 border border-zinc-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="glass-panel p-6 rounded-2xl mb-8 border border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="badge badge-concrete">Redaktions-Übersicht</span>
             <span className="badge badge-accent">Meta Graph API Ready</span>
           </div>
-          <h1 className="font-heading text-2xl font-bold text-white tracking-wide">
+          <h1 className="font-heading text-2xl font-bold text-zinc-900 dark:text-white tracking-wide">
             Veröffentlichungs-Kalender & Status
           </h1>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-zinc-600 dark:text-gray-400 mt-1">
             Alle geplanten Veröffentlichungen für Susan Broy (`@syken_broy`) im Überblick.
           </p>
         </div>
 
         {/* Stats Pills */}
         <div className="flex items-center gap-3">
-          <div className="bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl text-center">
-            <span className="text-lg font-bold text-emerald-400 block font-mono">{approvedCount}</span>
-            <span className="text-[10px] text-gray-400 uppercase tracking-wider">Freigegeben</span>
+          <div className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-4 py-2.5 rounded-xl text-center">
+            <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400 block font-mono">{approvedCount}</span>
+            <span className="text-[10px] text-zinc-500 dark:text-gray-400 uppercase tracking-wider">Freigegeben</span>
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 px-4 py-2.5 rounded-xl text-center">
-            <span className="text-lg font-bold text-yellow-400 block font-mono">{pendingCount}</span>
-            <span className="text-[10px] text-gray-400 uppercase tracking-wider">In Review</span>
+          <div className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-4 py-2.5 rounded-xl text-center">
+            <span className="text-lg font-bold text-amber-600 dark:text-yellow-400 block font-mono">{pendingCount}</span>
+            <span className="text-[10px] text-zinc-500 dark:text-gray-400 uppercase tracking-wider">In Review</span>
           </div>
         </div>
       </div>
 
       {/* Calendar List Timeline */}
-      <div className="glass-panel p-6 rounded-2xl border border-zinc-800 flex flex-col gap-4">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-            <CalendarIcon className="w-4 h-4 text-blue-400" />
+      <div className="glass-panel p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col gap-4">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4">
+          <h3 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+            <CalendarIcon className="w-4 h-4 text-blue-500" />
             Geplante Instagram Postings
           </h3>
-          <span className="text-xs text-gray-400">Sortierung nach Veröffentlichungsdatum</span>
+          <span className="text-xs text-zinc-500 dark:text-gray-400">Sortierung nach Veröffentlichungsdatum</span>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -55,11 +55,11 @@ export default function CalendarView({ posts }) {
             return (
               <div 
                 key={post.id}
-                className="bg-zinc-900/80 border border-zinc-800 hover:border-zinc-700 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all"
+                className="bg-zinc-50/80 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-all"
               >
                 {/* Left: Thumbnail & Info */}
                 <div className="flex items-center gap-4">
-                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-zinc-700 bg-black flex-shrink-0">
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-zinc-300 dark:border-zinc-700 bg-black flex-shrink-0">
                     <img src={post.mediaUrl} alt={post.title} className="w-full h-full object-cover" />
                     <div className="absolute bottom-0 inset-x-0 bg-black/80 py-0.5 text-[8px] text-center font-mono text-yellow-400">
                       {post.type.toUpperCase()}
@@ -68,19 +68,19 @@ export default function CalendarView({ posts }) {
 
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-white">{post.title}</h4>
+                      <h4 className="text-sm font-bold text-zinc-900 dark:text-white">{post.title}</h4>
                       <span className="badge badge-concrete text-[10px]">
                         {post.medium === 'concrete' ? 'Beton' : post.medium === 'bw_painting' ? 'S/W Malerei' : 'Metall'}
                       </span>
                     </div>
 
-                    <p className="text-xs text-gray-400 mt-1 line-clamp-1">
+                    <p className="text-xs text-zinc-600 dark:text-gray-400 mt-1 line-clamp-1">
                       "{selectedVariant.caption.slice(0, 75)}..."
                     </p>
 
-                    <div className="flex items-center gap-3 mt-2 text-[11px] text-gray-500">
-                      <span className="flex items-center gap-1 text-gray-300">
-                        <Clock className="w-3 h-3 text-blue-400" />
+                    <div className="flex items-center gap-3 mt-2 text-[11px] text-zinc-500 dark:text-gray-500">
+                      <span className="flex items-center gap-1 text-zinc-700 dark:text-gray-300 font-semibold">
+                        <Clock className="w-3 h-3 text-blue-500" />
                         {post.date}
                       </span>
                       <span>•</span>
@@ -89,8 +89,8 @@ export default function CalendarView({ posts }) {
                   </div>
                 </div>
 
-                {/* Right: Status & Auto-Publish Indicator */}
-                <div className="flex flex-col md:items-end gap-2 w-full md:w-auto border-t md:border-t-0 pt-3 md:pt-0 border-zinc-800">
+                {/* Right: Status */}
+                <div className="flex flex-col md:items-end gap-2 w-full md:w-auto border-t md:border-t-0 pt-3 md:pt-0 border-zinc-200 dark:border-zinc-800">
                   {isApproved ? (
                     <div className="flex items-center gap-2">
                       <span className="badge badge-status-ready">
@@ -98,7 +98,7 @@ export default function CalendarView({ posts }) {
                         Terminiert (Auto-Publish)
                       </span>
                       <button 
-                        className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg text-gray-300 transition-colors"
+                        className="p-2 bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 rounded-lg text-zinc-700 dark:text-gray-300 transition-colors"
                         title="Export Meta Package"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -110,7 +110,7 @@ export default function CalendarView({ posts }) {
                     </span>
                   )}
 
-                  <span className="text-[10px] text-gray-500 font-mono">
+                  <span className="text-[10px] text-zinc-500 dark:text-gray-500 font-mono">
                     Target Account: @syken_broy
                   </span>
                 </div>
