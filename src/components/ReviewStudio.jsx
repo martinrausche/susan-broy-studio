@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import InstagramSimulator from './InstagramSimulator';
 import BroyLogo from './BroyLogo';
-import { REEL_TRANSITION_EFFECTS } from '../services/geminiCopilot';
-import { Layers, CheckCircle2, Edit3, Music, Tag, Calendar, Sparkles, Save, ShieldCheck, Film, Type, Sliders, Eye } from 'lucide-react';
+import { REEL_TRANSITION_EFFECTS, TYPOGRAPHY_LAYOUT_PRESETS } from '../services/geminiCopilot';
+import { Layers, CheckCircle2, Edit3, Music, Calendar, Save, Film, Type, Sparkles } from 'lucide-react';
 
 const AUDIO_PRESETS = [
   'Ambient Calm — Deep Resonance (Slow & Cinematic)',
@@ -20,10 +20,12 @@ export default function ReviewStudio({ posts, onApprovePost }) {
   
   const currentVariant = selectedPost?.variants[selectedVariantIdx] || selectedPost?.variants[0];
   
-  // Editable State (Strict Zero-Invention Rule & High Creativity Controls)
+  // Editable State (High Creativity & Negative Space Controls)
   const [editedCaption, setEditedCaption] = useState(currentVariant?.caption || '');
   const [editedOverlayText, setEditedOverlayText] = useState(currentVariant?.overlayText || '');
-  const [textColor, setTextColor] = useState(currentVariant?.textColor || 'black'); // 'black' for white bg, 'white' for dark bg
+  const [textColor, setTextColor] = useState(currentVariant?.textColor || 'black');
+  const [overlayPosition, setOverlayPosition] = useState(currentVariant?.overlayPosition || 'top_angled');
+  const [rotationAngle, setRotationAngle] = useState(currentVariant?.rotationAngle || '-8deg');
   const [selectedTransition, setSelectedTransition] = useState(currentVariant?.transitionEffect || 'zoom_pan');
   const [selectedAudio, setSelectedAudio] = useState(currentVariant?.audio || AUDIO_PRESETS[0]);
   
@@ -51,6 +53,8 @@ export default function ReviewStudio({ posts, onApprovePost }) {
     setEditedCaption(targetVar.caption);
     setEditedOverlayText(targetVar.overlayText || '');
     setTextColor(targetVar.textColor || 'black');
+    setOverlayPosition(targetVar.overlayPosition || 'top_angled');
+    setRotationAngle(targetVar.rotationAngle || '-8deg');
     setSelectedTransition(targetVar.transitionEffect || 'zoom_pan');
     setSelectedAudio(targetVar.audio || AUDIO_PRESETS[0]);
   };
@@ -66,6 +70,8 @@ export default function ReviewStudio({ posts, onApprovePost }) {
       caption: editedCaption,
       overlayText: editedOverlayText,
       textColor,
+      overlayPosition,
+      rotationAngle,
       transitionEffect: selectedTransition,
       audio: selectedAudio
     };
@@ -81,14 +87,14 @@ export default function ReviewStudio({ posts, onApprovePost }) {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="badge badge-accent">Kinetisches Reel Studio</span>
-            <span className="badge badge-concrete">Direkte Video-Typografie</span>
+            <span className="badge badge-accent">3 Kreative Reel-Optionen</span>
+            <span className="badge badge-concrete">Schrift im Freiraum & Drehung</span>
           </div>
           <h1 className="font-heading text-2xl font-bold text-zinc-900 dark:text-white tracking-wide">
-            Kinetische Texte, Effekte & Wasserzeichen
+            Kinetisches Reel Studio
           </h1>
           <p className="text-xs text-zinc-600 dark:text-gray-400 mt-0.5">
-            Texte werden mit **Fade- & Zoom-Animationen direkt im Video** eingeblendet (Schwarz auf hellen Stellen / Weiß auf dunklen Stellen).
+            Wählen Sie aus 3 unterschiedlichen Layout-Varianten (z.B. **Schräg im Weißraum**, **Senkrechter Rand-Stempel** oder **Ecke**).
           </p>
         </div>
 
@@ -131,7 +137,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
           {/* 3 Reel Variants Selector */}
           <div className="flex flex-col gap-3">
             <label className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-gray-400">
-              3 Kinetische Reel-Stile:
+              3 Kinetische Layout-Optionen vergleichen:
             </label>
 
             <div className="grid grid-cols-1 gap-3">
@@ -161,7 +167,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                   {v.overlayText && (
                     <div className="bg-zinc-100 dark:bg-zinc-950/80 p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 my-1">
                       <span className="text-[10px] font-mono text-zinc-700 dark:text-gray-300 block truncate">
-                        Kinetischer Video-Text: "{v.overlayText.replace(/\n/g, ' • ')}"
+                        Freiraum-Text: "{v.overlayText.replace(/\n/g, ' • ')}"
                       </span>
                     </div>
                   )}
@@ -184,37 +190,76 @@ export default function ReviewStudio({ posts, onApprovePost }) {
           {/* Reel Controls Form */}
           <div className="glass-panel p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col gap-5">
             
-            {/* 1. Kinetischer Video-Text & Farbe */}
+            {/* 1. Typografie Position & Ausrichtung */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-2">
-                  <Type className="w-4 h-4 text-blue-500" />
-                  1. Kinetischer Video-Text (Zeilen faden & zoomen rhythmisch ein):
-                </label>
+              <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-2 mb-2">
+                <Type className="w-4 h-4 text-blue-500" />
+                1. Typografie-Ausrichtung im Freiraum / Weißraum:
+              </label>
 
-                {/* Text Color Toggle: Black on White vs White on Black */}
-                <div className="flex items-center gap-1.5 bg-zinc-100 dark:bg-zinc-900 p-1 rounded-lg border border-zinc-200 dark:border-zinc-800">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+                <button
+                  type="button"
+                  onClick={() => { setOverlayPosition('top_angled'); setRotationAngle('-8deg'); }}
+                  className={`p-2.5 rounded-xl border text-left text-xs font-bold transition-all ${
+                    overlayPosition === 'top_angled' ? 'bg-zinc-900 text-white dark:bg-white dark:text-black border-zinc-900' : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
+                  }`}
+                >
+                  📐 Schräg (-8° Tilt) im oberen Weißraum
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => { setOverlayPosition('side_vertical'); setRotationAngle('90deg'); }}
+                  className={`p-2.5 rounded-xl border text-left text-xs font-bold transition-all ${
+                    overlayPosition === 'side_vertical' ? 'bg-zinc-900 text-white dark:bg-white dark:text-black border-zinc-900' : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
+                  }`}
+                >
+                  ▍ Senkrecht (90° Vertikal) am Bildrand
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => { setOverlayPosition('top_left'); setRotationAngle('0deg'); }}
+                  className={`p-2.5 rounded-xl border text-left text-xs font-bold transition-all ${
+                    overlayPosition === 'top_left' ? 'bg-zinc-900 text-white dark:bg-white dark:text-black border-zinc-900' : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
+                  }`}
+                >
+                  ↖️ Freie obere linke Ecke
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => { setOverlayPosition('top_right'); setRotationAngle('0deg'); }}
+                  className={`p-2.5 rounded-xl border text-left text-xs font-bold transition-all ${
+                    overlayPosition === 'top_right' ? 'bg-zinc-900 text-white dark:bg-white dark:text-black border-zinc-900' : 'bg-zinc-100 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'
+                  }`}
+                >
+                  ↗️ Freie obere rechte Ecke
+                </button>
+              </div>
+
+              {/* Text Color Toggle */}
+              <div className="flex items-center justify-between mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-800">
+                <span className="text-xs text-zinc-600 dark:text-gray-400 font-medium">Textfarbe für den Freiraum:</span>
+                <div className="flex items-center gap-1.5">
                   <button
                     type="button"
                     onClick={() => setTextColor('black')}
-                    className={`px-2.5 py-1 rounded text-[10px] font-bold transition-all ${
-                      textColor === 'black'
-                        ? 'bg-black text-white shadow-sm'
-                        : 'text-zinc-600 dark:text-gray-400'
+                    className={`px-3 py-1 rounded-lg text-xs font-bold border transition-all ${
+                      textColor === 'black' ? 'bg-black text-white shadow-sm' : 'bg-zinc-200 text-black opacity-60'
                     }`}
                   >
-                    ⚫ Schwarz (auf hellen Stellen)
+                    ⚫ Schwarz (auf weißem Grund)
                   </button>
                   <button
                     type="button"
                     onClick={() => setTextColor('white')}
-                    className={`px-2.5 py-1 rounded text-[10px] font-bold transition-all ${
-                      textColor === 'white'
-                        ? 'bg-white text-black shadow-sm'
-                        : 'text-zinc-600 dark:text-gray-400'
+                    className={`px-3 py-1 rounded-lg text-xs font-bold border transition-all ${
+                      textColor === 'white' ? 'bg-white text-black shadow-sm' : 'bg-zinc-800 text-white opacity-60'
                     }`}
                   >
-                    ⚪ Weiß (auf dunklen Stellen)
+                    ⚪ Weiß (auf dunklem Grund)
                   </button>
                 </div>
               </div>
@@ -223,15 +268,12 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                 value={editedOverlayText}
                 onChange={(e) => setEditedOverlayText(e.target.value)}
                 rows={3}
-                className="input-studio w-full rounded-xl p-3 text-xs leading-relaxed font-mono resize-none border-blue-500/40"
-                placeholder="Jede Zeile wird nacheinander dynamisch im Video eingeblendet..."
+                className="input-studio w-full rounded-xl p-3 text-xs leading-relaxed font-mono resize-none border-blue-500/40 mt-3"
+                placeholder="Dieser Text fadet rhythmisch im Freiraum des Videos..."
               />
-              <span className="text-[10px] text-zinc-500 dark:text-gray-500 mt-1 block">
-                Tipp: Jede neue Zeile wird im Video als eigener animierter Impuls gefadet und gezoomt!
-              </span>
             </div>
 
-            {/* 2. Kameraschwenks & Übergangseffekte */}
+            {/* 2. Kameraschwenks */}
             <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800">
               <label className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-gray-300 flex items-center gap-2 mb-2">
                 <Film className="w-4 h-4 text-amber-500" />
@@ -269,9 +311,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                     type="button"
                     onClick={() => setWatermarkColor('white')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                      watermarkColor === 'white' 
-                        ? 'bg-white text-black border-zinc-400 shadow-sm' 
-                        : 'bg-zinc-800 text-white border-zinc-700 opacity-60'
+                      watermarkColor === 'white' ? 'bg-white text-black border-zinc-400 shadow-sm' : 'bg-zinc-800 text-white border-zinc-700 opacity-60'
                     }`}
                   >
                     ⚪ Weiß
@@ -280,9 +320,7 @@ export default function ReviewStudio({ posts, onApprovePost }) {
                     type="button"
                     onClick={() => setWatermarkColor('black')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                      watermarkColor === 'black' 
-                        ? 'bg-black text-white border-zinc-700 shadow-sm' 
-                        : 'bg-zinc-200 text-black border-zinc-300 opacity-60'
+                      watermarkColor === 'black' ? 'bg-black text-white border-zinc-700 shadow-sm' : 'bg-zinc-200 text-black border-zinc-300 opacity-60'
                     }`}
                   >
                     ⚫ Schwarz
@@ -362,8 +400,8 @@ export default function ReviewStudio({ posts, onApprovePost }) {
         {/* Right 5 Columns: Dynamic Animated Reel Simulator with Live In-Video Text */}
         <div className="lg:col-span-5 flex flex-col items-center justify-start sticky top-24">
           <div className="text-center mb-3">
-            <span className="badge badge-concrete">Kinetische Video-Typografie</span>
-            <p className="text-[11px] text-zinc-500 dark:text-gray-400 mt-1">Einfaden & Zoom-Effekt direkt auf dem Videoclip</p>
+            <span className="badge badge-concrete">Echte Reel Video-Vorschau</span>
+            <p className="text-[11px] text-zinc-500 dark:text-gray-400 mt-1">Schräge & vertikale Schrift im Freiraum</p>
           </div>
 
           <InstagramSimulator 
@@ -373,6 +411,8 @@ export default function ReviewStudio({ posts, onApprovePost }) {
               caption: editedCaption,
               overlayText: editedOverlayText,
               textColor,
+              overlayPosition,
+              rotationAngle,
               transitionEffect: selectedTransition,
               audio: selectedAudio
             }}

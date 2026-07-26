@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BroyLogo from './BroyLogo';
-import { Heart, MessageCircle, Send, Bookmark, Music, Volume2, VolumeX, Play, Pause, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { Heart, MessageCircle, Send, Bookmark, Music, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 
 export default function InstagramSimulator({ post, variant, watermarkColor = 'white', watermarkOpacity = 0.55 }) {
   const [currentSlideIdx, setCurrentSlideIdx] = useState(0);
@@ -17,8 +17,9 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
 
   const transitionEffect = variant?.transitionEffect || 'zoom_pan';
   const overlayText = variant?.overlayText || post?.title || 'SUSAN BROY';
-  const textColor = variant?.textColor || 'black'; // 'black' or 'white'
-  const textAnimation = variant?.textAnimation || 'kinetic_bounce'; // 'kinetic_bounce', 'fade_zoom', 'staggered_type'
+  const textColor = variant?.textColor || 'black'; // 'black' for white space, 'white' for dark space
+  const overlayPosition = variant?.overlayPosition || 'top_angled'; // 'top_angled', 'side_vertical', 'top_left', 'top_right'
+  const rotationAngle = variant?.rotationAngle || (overlayPosition === 'top_angled' ? '-8deg' : overlayPosition === 'side_vertical' ? '90deg' : '0deg');
 
   // Text Lines Split for Kinetic Animation Phases
   const textLines = overlayText.split('\n').filter(Boolean);
@@ -29,7 +30,7 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
 
     const textInterval = setInterval(() => {
       setTextPhase(prev => (prev + 1) % Math.max(1, textLines.length));
-    }, 2200); // Shift text phrase every 2.2 seconds for dynamic rhythm
+    }, 2400);
 
     return () => clearInterval(textInterval);
   }, [isPlaying, textLines.length]);
@@ -60,18 +61,18 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
             </div>
             <div>
               <span className="text-[11px] font-bold text-white block leading-none">syken_broy</span>
-              <span className="text-[9px] text-gray-400">Atelier Gauting • Kinetic Reel</span>
+              <span className="text-[9px] text-gray-400">Atelier Gauting • Pure Video Reel</span>
             </div>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="bg-white/20 text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
-              KINETIC MOTION
+            <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+              REEL VIDEO
             </span>
           </div>
         </div>
 
-        {/* Video Reel Player Canvas with High-Creativity In-Video Text */}
+        {/* Video Reel Player Canvas - Pure Video without Carousel Arrows */}
         <div className="relative flex-1 bg-zinc-950 overflow-hidden flex items-center justify-center group">
           
           {/* Active Asset Image with Continuous Dynamic Motion */}
@@ -90,26 +91,39 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
             
             {/* Dynamic Studio Lighting Animation */}
             {isPlaying && (
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/60 via-transparent to-white/20 animate-pulse duration-[2500ms] pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/50 via-transparent to-white/20 animate-pulse duration-[2800ms] pointer-events-none" />
             )}
 
             {/* Subtle Vignette Overlay for Depth */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
 
             {/* ========================================================================= */}
-            {/* SUBTLE MONOCHROME TRANSPARENT WATERMARK (No boxes, pure architectural logo) */}
+            {/* SUBTLE MONOCHROME TRANSPARENT WATERMARK LOGO */}
             {/* ========================================================================= */}
             <div className="absolute top-4 right-4 z-20 pointer-events-none" style={{ opacity: watermarkOpacity }}>
-              <BroyLogo size={32} color={watermarkColor === 'black' ? '#000000' : '#FFFFFF'} />
+              <BroyLogo size={30} color={watermarkColor === 'black' ? '#000000' : '#FFFFFF'} />
             </div>
 
             {/* ========================================================================= */}
-            {/* HIGH-CREATIVITY KINETIC IN-VIDEO TYPOGRAPHY (No heavy backgrounds!) */}
-            {/* Directly projected onto artwork/background with dynamic Zoom & Fade */}
+            {/* NEGATIVE SPACE KINETIC TYPOGRAPHY (Placed in White/Empty Space - NOT over artwork) */}
+            {/* Supports Angled (-8° Tilt), Vertical (90° Side), and Corner Placements */}
             {/* ========================================================================= */}
 
             {textLines.length > 0 && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 pointer-events-none z-30 text-center">
+              <div 
+                className={`absolute inset-x-4 pointer-events-none z-30 transition-all duration-500 ${
+                  overlayPosition === 'side_vertical'
+                    ? 'top-20 left-2 right-auto origin-top-left'
+                    : overlayPosition === 'top_right'
+                    ? 'top-8 right-4 left-auto text-right'
+                    : overlayPosition === 'top_left'
+                    ? 'top-8 left-4 text-left'
+                    : 'top-10 inset-x-4 text-center' // top_angled default
+                }`}
+                style={{
+                  transform: rotationAngle !== '0deg' ? `rotate(${rotationAngle})` : 'none'
+                }}
+              >
                 {textLines.map((line, idx) => {
                   const isActive = idx === (textPhase % textLines.length);
 
@@ -118,18 +132,18 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
                       key={idx}
                       className={`transition-all duration-700 transform ${
                         isActive
-                          ? 'opacity-100 scale-105 translate-y-0 filter drop-shadow-lg'
-                          : 'opacity-0 scale-95 translate-y-4 pointer-events-none absolute'
+                          ? 'opacity-100 scale-100 translate-y-0 filter drop-shadow-md'
+                          : 'opacity-0 scale-95 -translate-y-2 pointer-events-none absolute'
                       }`}
                     >
                       <h2 
                         style={{ color: textColor === 'black' ? '#000000' : '#FFFFFF' }}
                         className={`font-heading font-black uppercase tracking-widest leading-tight ${
-                          line.length < 20 ? 'text-xl sm:text-2xl' : 'text-sm sm:text-base'
+                          line.length < 18 ? 'text-lg sm:text-xl' : 'text-xs sm:text-sm'
                         } ${
                           textColor === 'black'
-                            ? 'drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]'
-                            : 'drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]'
+                            ? 'drop-shadow-[0_1px_4px_rgba(255,255,255,0.9)]'
+                            : 'drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]'
                         }`}
                       >
                         {line}
@@ -150,37 +164,14 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
               </div>
             </button>
 
-            {/* Reel Progress Line */}
-            <div className="absolute top-2 inset-x-3 flex gap-1 z-30">
-              {assetList.map((_, idx) => (
-                <div key={idx} className="h-1 flex-1 bg-white/30 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full bg-white transition-all duration-300 ${
-                      currentSlideIdx === idx ? (isPlaying ? 'w-full transition-all duration-[4500ms] ease-linear' : 'w-full') : (currentSlideIdx > idx ? 'w-full' : 'w-0')
-                    }`}
-                  />
-                </div>
-              ))}
+            {/* Reel Video Progress Line (Single Line for Video) */}
+            <div className="absolute top-2 inset-x-3 h-1 bg-white/30 rounded-full overflow-hidden z-30">
+              <div 
+                className={`h-full bg-white transition-all duration-300 ${
+                  isPlaying ? 'w-full transition-all duration-[4500ms] ease-linear' : 'w-full'
+                }`}
+              />
             </div>
-
-            {/* Multi-Slide Navigation */}
-            {assetList.length > 1 && (
-              <>
-                <button
-                  onClick={() => setCurrentSlideIdx(prev => (prev > 0 ? prev - 1 : assetList.length - 1))}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black text-white p-1.5 rounded-full border border-white/20 backdrop-blur-md z-30"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-
-                <button
-                  onClick={() => setCurrentSlideIdx(prev => (prev + 1) % assetList.length)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black text-white p-1.5 rounded-full border border-white/20 backdrop-blur-md z-30"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </>
-            )}
 
             {/* Music Bar */}
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-[10px] z-30">
