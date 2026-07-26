@@ -12,10 +12,21 @@ export const LANGUAGES = [
   { id: 'bilingual', label: '🌐 Zweisprachig (DE / EN)', desc: 'Deutsch & Englisch' }
 ];
 
+export const ART_MEDIUMS = [
+  { id: 'concrete', label: 'Beton-Skulptur', accent: '#A0A0B0', desc: 'Raues Mineral, Schattenspiel & massive Form im Raum' },
+  { id: 'metal', label: 'Metall-Installation', accent: '#D4AF37', desc: 'Präziser Stahl/Bronze, Lichtreflexe & geometrische Kanten' },
+  { id: 'bw_painting', label: 'S/W Grafik + Akzentfarbe', accent: '#E2F518', desc: 'Klarer Kontrast auf Leinwand mit gezieltem Farbakzent' },
+  { id: 'mixed', label: 'Beton & Metall Kombination', accent: '#8E8E93', desc: 'Spannungsverhältnis organischer und industrieller Materialien' }
+];
+
 export const PRESET_IMAGES = {
   exhibition: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85',
   atelier: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=85',
-  artwork: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=85'
+  artwork: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=85',
+  concrete: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=85',
+  metal: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=85',
+  bw_painting: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=85',
+  mixed: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=85'
 };
 
 export const REEL_TRANSITION_EFFECTS = [
@@ -29,6 +40,65 @@ export const TYPOGRAPHY_LAYOUT_PRESETS = [
   { id: 'vertical_margin', name: '▍ Vertikale Seitenschrift (Senkrecht 90°)', zone: 'negative_space_side' },
   { id: 'top_left_clean', name: '↖️ Obere linke Ecke im Freiraum', zone: 'top_left' },
   { id: 'top_right_clean', name: '↗️ Obere rechte Ecke im Freiraum', zone: 'top_right' }
+];
+
+export const DEMO_POSTS = [
+  {
+    id: 'post-1',
+    title: 'Ausstellung "SPATIAL PRESENCE"',
+    category: 'exhibition',
+    language: 'de',
+    date: '2026-07-28',
+    type: 'reel',
+    mediaUrl: PRESET_IMAGES.exhibition,
+    location: 'Galerie von&von, Nürnberg',
+    hours: 'Di–Fr 11–18 Uhr, Sa 11–15 Uhr',
+    keywords: 'Vernissage, Ausstellungsaufbau, Skulpturen im Raum',
+    tags: ['@galerie_vonundvon'],
+    accentColor: '#FFFFFF',
+    status: 'review_ready',
+    variants: [
+      {
+        id: 'var-1-a',
+        name: 'Variante A: Schräge Schrift im Weißraum (-8° Tilt)',
+        layoutPreset: 'angled_top',
+        overlayPosition: 'top_angled',
+        rotationAngle: '-8deg',
+        textColor: 'black',
+        overlayText: 'AUSSTELLUNG "SPATIAL PRESENCE"\nGalerie von&von, Nürnberg • Ab 28. Juli 2026',
+        transitionEffect: 'zoom_pan',
+        caption: `HERZLICHE EINLADUNG zur Ausstellung "SPATIAL PRESENCE".\n\n📍 Ort: Galerie von&von, Nürnberg\n🗓️ Eröffnung: 28. Juli 2026\n🕒 Öffnungszeiten: Di–Fr 11–18 Uhr, Sa 11–15 Uhr\n\n@syken_broy @galerie_vonundvon`,
+        hashtags: ['#susanbroy', '#ausstellung', '#contemporaryart', '#nürnberg'],
+        audio: 'Ambient Calm — Deep Resonance'
+      },
+      {
+        id: 'var-1-b',
+        name: 'Variante B: Vertikale Seitenschrift (Senkrecht 90°)',
+        layoutPreset: 'vertical_margin',
+        overlayPosition: 'side_vertical',
+        rotationAngle: '90deg',
+        textColor: 'black',
+        overlayText: 'SUSAN BROY • SPATIAL PRESENCE',
+        transitionEffect: 'light_fade',
+        caption: `Ausstellung "SPATIAL PRESENCE" in Nürnberg.\n\nBesuchszeiten & Details: www.susanbroy.com\n@syken_broy`,
+        hashtags: ['#susanbroy', '#exhibition2026', '#minimalism'],
+        audio: 'Pulse of Silence — Atmospheric Beat'
+      },
+      {
+        id: 'var-1-c',
+        name: 'Variante C: Obere rechte Ecke im Freiraum',
+        layoutPreset: 'top_right_clean',
+        overlayPosition: 'top_right',
+        rotationAngle: '0deg',
+        textColor: 'black',
+        overlayText: 'SPATIAL PRESENCE\nVERNISSAGE 28. JULI 2026',
+        transitionEffect: 'slide_push',
+        caption: `Einblicke vor der Eröffnung von "SPATIAL PRESENCE".\n\n@syken_broy`,
+        hashtags: ['#susanbroy', '#behindthescenes'],
+        audio: 'Natural Studio Acoustics — Quiet Space'
+      }
+    ]
+  }
 ];
 
 export async function generatePostVariants(inputData) {
