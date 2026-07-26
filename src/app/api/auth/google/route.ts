@@ -3,10 +3,14 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   
-  // Use GOOGLE_REDIRECT_URI from env if set, otherwise construct dynamically from request origin
+  // Determine protocol and host accurately behind Vercel edge proxy
+  const proto = request.headers.get("x-forwarded-proto") || "https";
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || request.nextUrl.host;
+  
+  // Preferred redirectUri from env if explicitly set, otherwise exact current domain
   const redirectUri = 
     process.env.GOOGLE_REDIRECT_URI || 
-    `${request.nextUrl.origin}/api/auth/callback`;
+    `${proto}://${host}/api/auth/callback`;
 
   if (!clientId) {
     return NextResponse.json(
