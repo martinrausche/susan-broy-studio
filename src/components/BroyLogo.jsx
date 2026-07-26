@@ -1,54 +1,34 @@
 import React from 'react';
 
-export default function BroyLogo({ size = 48, className = '', color = 'currentColor', showStudioText = false, variant = 'default' }) {
-  const isInstagram = variant === 'instagram' || color === 'instagram';
-  const strokeColor = isInstagram ? 'url(#broyInstagramGradient)' : color;
-  const fillColor = isInstagram ? 'url(#broyInstagramGradient)' : color;
-
+export default function BroyLogo({ size = 48, className = '', color = 'currentColor', opacity = 1 }) {
   return (
-    <div className={`inline-flex flex-col items-center gap-1 ${className}`}>
+    <div className={`inline-flex flex-col items-center gap-1 ${className}`} style={{ opacity }}>
       <svg 
         width={size} 
         height={size} 
         viewBox="0 0 200 200" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"
-        className="transition-transform duration-300 hover:scale-105"
       >
-        <defs>
-          {/* Instagram Signature Color Gradient: Deep Purple -> Magenta -> Sunset Orange */}
-          <linearGradient id="broyInstagramGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#833AB4" />
-            <stop offset="50%" stopColor="#FD1D1D" />
-            <stop offset="100%" stopColor="#F56040" />
-          </linearGradient>
-        </defs>
-
         {/* Susan Broy Official Logo: Interlocking rotational symmetry frame */}
-        
-        {/* Left Segment: Top-Left to Bottom-Left with upward vertical stem */}
         <path 
           d="M 90,20 L 20,20 L 20,180 L 90,180 L 90,130" 
-          stroke={strokeColor} 
+          stroke={color} 
           strokeWidth="13" 
           strokeLinecap="square" 
           strokeLinejoin="miter"
         />
-        
-        {/* Right Segment: Top-Right to Bottom-Right with downward vertical stem */}
         <path 
           d="M 110,70 L 110,20 L 180,20 L 180,180 L 110,180" 
-          stroke={strokeColor} 
+          stroke={color} 
           strokeWidth="13" 
           strokeLinecap="square" 
           strokeLinejoin="miter"
         />
-
-        {/* Central Typography BROY */}
         <text 
           x="100" 
           y="116" 
-          fill={fillColor} 
+          fill={color} 
           fontSize="46" 
           fontWeight="900" 
           fontFamily="Montserrat, 'Inter', system-ui, sans-serif" 
@@ -58,14 +38,6 @@ export default function BroyLogo({ size = 48, className = '', color = 'currentCo
           BROY
         </text>
       </svg>
-      {showStudioText && (
-        <span 
-          style={{ fontSize: Math.max(9, size * 0.18), letterSpacing: '0.25em' }}
-          className="text-xs uppercase tracking-widest text-gray-400 font-light"
-        >
-          contemporary studio
-        </span>
-      )}
     </div>
   );
 }
