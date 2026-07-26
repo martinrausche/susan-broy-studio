@@ -7,51 +7,65 @@ export default function Header({ activeTab, setActiveTab, pendingCount, theme, s
   const logoColor = isDark ? '#FFFFFF' : '#000000';
 
   return (
-    <header className="glass-panel sticky top-0 z-50 px-6 py-4 transition-colors">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <header className="glass-panel sticky top-0 z-50 px-4 sm:px-6 py-3.5 transition-colors">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
         
-        {/* Brand Header */}
-        <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveTab('input')}>
-          <BroyLogo size={42} color={logoColor} />
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <span className="font-heading text-lg font-bold tracking-wider text-zinc-900 dark:text-white">
-                SUSAN BROY
+        {/* Top Mobile Bar: Logo & Actions */}
+        <div className="w-full md:w-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('input')}>
+            <BroyLogo size={36} color={logoColor} />
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <span className="font-heading text-base sm:text-lg font-bold tracking-wider text-zinc-900 dark:text-white">
+                  SUSAN BROY
+                </span>
+                <span className="badge badge-accent text-[9px] px-1.5 py-0.5">Studio</span>
+              </div>
+              <span className="text-[10px] text-zinc-500 dark:text-gray-400 tracking-widest uppercase font-medium">
+                Gauting • Instagram
               </span>
-              <span className="badge badge-accent">Instagram Studio</span>
             </div>
-            <span className="text-xs text-zinc-500 dark:text-gray-400 tracking-widest uppercase font-medium">
-              contemporary studio · Gauting
-            </span>
+          </div>
+
+          {/* Right Mobile Quick Actions */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle theme={theme} setTheme={setTheme} />
+            <a 
+              href="/api/auth/logout"
+              className="p-2 text-zinc-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+              title="Abmelden"
+            >
+              <LogOut className="w-4 h-4" />
+            </a>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <nav className="flex items-center gap-2 bg-zinc-200/80 dark:bg-black/50 p-1.5 rounded-xl border border-zinc-300 dark:border-gray-800">
+        {/* Navigation Tabs (Scrollable & Responsive on Mobile) */}
+        <nav className="w-full md:w-auto flex items-center gap-1.5 bg-zinc-200/80 dark:bg-black/50 p-1.5 rounded-xl border border-zinc-300 dark:border-gray-800 overflow-x-auto max-w-full no-scrollbar">
           <button
             onClick={() => setActiveTab('input')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap tracking-wide transition-all ${
               activeTab === 'input' 
                 ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm border border-zinc-300 dark:border-gray-700' 
                 : 'text-zinc-600 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            Redaktionsplan & Input
+            <Sparkles className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
+            <span>Redaktionsplan & Input</span>
           </button>
 
           <button
             onClick={() => setActiveTab('review')}
-            className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+            className={`relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap tracking-wide transition-all ${
               activeTab === 'review' 
                 ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm border border-zinc-300 dark:border-gray-700' 
                 : 'text-zinc-600 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
-            <Layers className="w-4 h-4 text-emerald-500" />
-            Freigabe-Center (3 Varianten)
+            <Layers className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+            <span>Freigabe (3 Varianten)</span>
             {pendingCount > 0 && (
-              <span className="ml-1 bg-amber-400 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+              <span className="bg-amber-400 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
                 {pendingCount}
               </span>
             )}
@@ -59,19 +73,19 @@ export default function Header({ activeTab, setActiveTab, pendingCount, theme, s
 
           <button
             onClick={() => setActiveTab('calendar')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap tracking-wide transition-all ${
               activeTab === 'calendar' 
                 ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm border border-zinc-300 dark:border-gray-700' 
                 : 'text-zinc-600 hover:text-zinc-900 dark:text-gray-400 dark:hover:text-white'
             }`}
           >
-            <Calendar className="w-4 h-4 text-blue-500" />
-            Kalender & Status
+            <Calendar className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />
+            <span>Kalender & Status</span>
           </button>
         </nav>
 
-        {/* Right Section: Theme Toggle, Instagram Badge & Logout */}
-        <div className="flex items-center gap-3">
+        {/* Desktop Right Section: Theme Toggle & Logout */}
+        <div className="hidden md:flex items-center gap-3">
           <ThemeToggle theme={theme} setTheme={setTheme} />
 
           <div className="hidden lg:flex items-center gap-2 text-xs text-zinc-600 dark:text-gray-400 bg-zinc-200/80 dark:bg-zinc-900/80 px-3 py-1.5 rounded-full border border-zinc-300 dark:border-gray-800">
