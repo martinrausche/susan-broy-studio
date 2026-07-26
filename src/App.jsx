@@ -13,15 +13,24 @@ export default function App() {
   const [posts, setPosts] = useState(DEMO_POSTS);
   const [notification, setNotification] = useState(null);
   
-  // Theme state: 'light' | 'dark' | 'system'
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('broy-theme') || 'dark';
-  });
-
+  // Theme state safely initialized for SSR
+  const [theme, setTheme] = useState('dark');
   const [isDark, setIsDark] = useState(true);
+
+  // Initialize theme from localStorage on client side
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('broy-theme');
+      if (savedTheme) {
+        setTheme(savedTheme);
+      }
+    }
+  }, []);
 
   // Apply dark mode class to <html> based on theme selection or system preference
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     localStorage.setItem('broy-theme', theme);
 
     const updateThemeClass = () => {
@@ -46,7 +55,6 @@ export default function App() {
 
     updateThemeClass();
 
-    // System theme listener
     if (theme === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const listener = (e) => {
