@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function BroyLogo({ size = 48, className = '', color = 'currentColor', opacity = 1 }) {
+export default function BroyLogo({ size = 48, className = '', color = 'currentColor', opacity = 1, variant = 'default' }) {
   return (
     <div className={`inline-flex flex-col items-center gap-1 ${className}`} style={{ opacity }}>
       <svg 

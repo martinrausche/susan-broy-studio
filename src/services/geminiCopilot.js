@@ -12,10 +12,21 @@ export const LANGUAGES = [
   { id: 'bilingual', label: '🌐 Zweisprachig (DE / EN)', desc: 'Deutsch & Englisch' }
 ];
 
+export const ART_MEDIUMS = [
+  { id: 'concrete', label: 'Beton-Skulptur', accent: '#A0A0B0', desc: 'Raues Mineral, Schattenspiel & massive Form im Raum' },
+  { id: 'metal', label: 'Metall-Installation', accent: '#D4AF37', desc: 'Präziser Stahl/Bronze, Lichtreflexe & geometrische Kanten' },
+  { id: 'bw_painting', label: 'S/W Grafik + Akzentfarbe', accent: '#E2F518', desc: 'Klarer Kontrast auf Leinwand mit gezieltem Farbakzent' },
+  { id: 'mixed', label: 'Beton & Metall Kombination', accent: '#8E8E93', desc: 'Spannungsverhältnis organischer und industrieller Materialien' }
+];
+
 export const PRESET_IMAGES = {
   exhibition: 'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85',
   atelier: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=85',
-  artwork: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=85'
+  artwork: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=85',
+  concrete: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=85',
+  metal: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=85',
+  bw_painting: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=85',
+  mixed: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=85'
 };
 
 export const REEL_TRANSITION_EFFECTS = [
@@ -84,11 +95,9 @@ export async function generatePostVariants(inputData) {
   const hoursClean = inputData.hours || '';
   const keywordsClean = inputData.keywords || '';
 
-  // ZERO INVENTION RULE: Use EXACT user inputs without hallucinating materials
   let variants = [];
 
   if (category === 'exhibition') {
-    const locString = locClean ? ` • ${locClean}` : '';
     const hoursString = hoursClean ? ` • ${hoursClean}` : '';
 
     if (lang === 'en') {
