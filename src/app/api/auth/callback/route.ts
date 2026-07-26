@@ -6,7 +6,8 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const error = searchParams.get("error");
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${request.nextUrl.origin}/api/auth/callback`;
 
   if (error) {
     console.error("Google OAuth error received:", error);
@@ -19,7 +20,6 @@ export async function GET(request: NextRequest) {
 
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI;
   const jwtSecret = process.env.JWT_SECRET;
   
   const allowedEmailsStr = process.env.ALLOWED_EMAILS || "";
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean);
 
-  if (!clientId || !clientSecret || !redirectUri || !jwtSecret) {
+  if (!clientId || !clientSecret || !jwtSecret) {
     console.error("Missing authentication configuration in environment variables.");
     return NextResponse.redirect(new URL("/login?error=server_configuration_error", baseUrl));
   }

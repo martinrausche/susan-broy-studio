@@ -1,12 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI;
+  
+  // Use GOOGLE_REDIRECT_URI from env if set, otherwise construct dynamically from request origin
+  const redirectUri = 
+    process.env.GOOGLE_REDIRECT_URI || 
+    `${request.nextUrl.origin}/api/auth/callback`;
 
-  if (!clientId || !redirectUri) {
+  if (!clientId) {
     return NextResponse.json(
-      { error: "Google OAuth Configuration is missing in environment variables." },
+      { error: "GOOGLE_CLIENT_ID is missing in environment variables." },
       { status: 500 }
     );
   }
