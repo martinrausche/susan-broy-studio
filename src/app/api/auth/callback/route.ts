@@ -1,6 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signJWT } from "@/lib/jwt";
 
+function normalizeEmail(email: string): string {
+  const clean = email.trim().toLowerCase();
+  const [local, domain] = clean.split('@');
+  if (!domain) return clean;
+
+  // For Gmail addresses, strip dots in local part for flexible matching
+  if (domain === 'gmail.com' || domain === 'googlemail.com') {
+    const localWithoutDots = local.replace(/\./g, '');
+    return `${localWithoutDots}@gmail.com`;
+  }
+  return clean;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
@@ -24,10 +37,12 @@ export async function GET(request: NextRequest) {
   const jwtSecret = process.env.JWT_SECRET;
   
   const allowedEmailsStr = process.env.ALLOWED_EMAILS || "";
-  const allowedEmails = allowedEmailsStr
+  const allowedEmailsRaw = allowedEmailsStr
     .split(",")
-    .map((e) => e.trim().toLowerCase())
+    .map((e) => e.trim())
     .filter(Boolean);
+
+  const allowedEmailsNormalized = allowedEmailsRaw.map(normalizeEmail);
 
   if (!clientId || !clientSecret || !jwtSecret) {
     console.error("Missing authentication configuration in environment variables.");
@@ -65,11 +80,21 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL("/login?error=profile_fetch_failed", baseUrl));
     }
 
-    const email = userInfo.email.toLowerCase();
+    const userEmailRaw = userInfo.email;
+    const userEmailNormalized = normalizeEmail(userEmailRaw);
 
-    if (allowedEmails.length > 0 && !allowedEmails.includes(email)) {
-      console.warn(`Unauthorized login attempt for: ${email}`);
-      return NextResponse.redirect(new URL("/login?error=unauthorized_user", baseUrl));
+    // If allowedEmails is populated, ensure user's email is authorized
+    if (allowedEmailsNormalized.length > 0) {
+      const isAuthorized = allowedEmailsNormalized.some(allowed => 
+        allowed === userEmailNormalized || 
+        userEmailRaw.toLowerCase() === allowed ||
+        allowed.includes(userEmailNormalized)
+      );
+
+      if (!isAuthorized) {
+        console.warn(`Unauthorized login attempt for: ${userEmailRaw} (Normalized: ${userEmailNormalized})`);
+        return NextResponse.redirect(new URL("/login?error=unauthorized_user", baseUrl));
+      }
     }
 
     const sessionToken = signJWT(
