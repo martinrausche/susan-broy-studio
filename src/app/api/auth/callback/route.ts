@@ -6,8 +6,9 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const error = searchParams.get("error");
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || request.nextUrl.origin;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${request.nextUrl.origin}/api/auth/callback`;
+  const canonicalDomain = "https://susan-broy-studio.vercel.app";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (process.env.NODE_ENV === "production" ? canonicalDomain : request.nextUrl.origin);
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || (process.env.NODE_ENV === "production" ? `${canonicalDomain}/api/auth/callback` : `${request.nextUrl.origin}/api/auth/callback`);
 
   if (error) {
     console.error("Google OAuth error received:", error);

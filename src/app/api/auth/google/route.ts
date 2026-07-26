@@ -3,14 +3,14 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   
-  // Determine protocol and host accurately behind Vercel edge proxy
-  const proto = request.headers.get("x-forwarded-proto") || "https";
-  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || request.nextUrl.host;
+  const canonicalDomain = "https://susan-broy-studio.vercel.app";
   
-  // Preferred redirectUri from env if explicitly set, otherwise exact current domain
+  // Use env redirect_uri if set, otherwise default to canonical Vercel production domain
   const redirectUri = 
     process.env.GOOGLE_REDIRECT_URI || 
-    `${proto}://${host}/api/auth/callback`;
+    (process.env.NODE_ENV === "production"
+      ? `${canonicalDomain}/api/auth/callback`
+      : `${request.nextUrl.origin}/api/auth/callback`);
 
   if (!clientId) {
     return NextResponse.json(
