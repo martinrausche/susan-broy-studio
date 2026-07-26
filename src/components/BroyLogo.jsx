@@ -11,26 +11,35 @@ export default function BroyLogo({ size = 48, className = '', color = 'currentCo
         xmlns="http://www.w3.org/2000/svg"
         className="transition-transform duration-300 hover:scale-105"
       >
-        {/* Outer Square Brackets Frame (BROY Geometric Logo) */}
-        {/* Top-Left Bracket */}
-        <path d="M 95,20 L 20,20 L 20,180 L 95,180" stroke={color} strokeWidth="12" strokeLinecap="square" strokeLinejoin="miter"/>
-        {/* Top-Right Bracket */}
-        <path d="M 105,20 L 180,20 L 180,180 L 105,180" stroke={color} strokeWidth="12" strokeLinecap="square" strokeLinejoin="miter"/>
+        {/* Outer Geometric Frame with interrupted top & bottom lines (Susan Broy Official Logo) */}
+        {/* Left Corner Bracket [ */}
+        <path 
+          d="M 70,20 L 20,20 L 20,180 L 70,180" 
+          stroke={color} 
+          strokeWidth="14" 
+          strokeLinecap="square" 
+          strokeLinejoin="miter"
+        />
         
-        {/* Inner vertical accents forming frame gap */}
-        <line x1="100" y1="20" x2="100" y2="60" stroke={color} strokeWidth="12"/>
-        <line x1="100" y1="140" x2="100" y2="180" stroke={color} strokeWidth="12"/>
+        {/* Right Corner Bracket ] */}
+        <path 
+          d="M 130,20 L 180,20 L 180,180 L 130,180" 
+          stroke={color} 
+          strokeWidth="14" 
+          strokeLinecap="square" 
+          strokeLinejoin="miter"
+        />
 
         {/* Central Bold Typography BROY */}
         <text 
           x="100" 
-          y="118" 
+          y="116" 
           fill={color} 
-          fontSize="48" 
+          fontSize="46" 
           fontWeight="900" 
-          fontFamily="Montserrat, sans-serif" 
+          fontFamily="Montserrat, 'Inter', sans-serif" 
           textAnchor="middle"
-          letterSpacing="2"
+          letterSpacing="3"
         >
           BROY
         </text>
