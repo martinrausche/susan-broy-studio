@@ -1,7 +1,7 @@
 import React from 'react';
 import BroyLogo from './BroyLogo';
 import ThemeToggle from './ThemeToggle';
-import { Sparkles, Calendar, Layers, Instagram } from 'lucide-react';
+import { Sparkles, Calendar, Layers, Instagram, LogOut } from 'lucide-react';
 
 export default function Header({ activeTab, setActiveTab, pendingCount, theme, setTheme, isDark }) {
   const logoColor = isDark ? '#FFFFFF' : '#000000';
@@ -70,7 +70,7 @@ export default function Header({ activeTab, setActiveTab, pendingCount, theme, s
           </button>
         </nav>
 
-        {/* Right Section: Theme Toggle & Account Meta */}
+        {/* Right Section: Theme Toggle, Instagram Badge & Logout */}
         <div className="flex items-center gap-3">
           <ThemeToggle theme={theme} setTheme={setTheme} />
 
@@ -78,6 +78,14 @@ export default function Header({ activeTab, setActiveTab, pendingCount, theme, s
             <Instagram className="w-3.5 h-3.5 text-pink-500" />
             <span className="font-semibold">@syken_broy</span>
           </div>
+
+          <a 
+            href="/api/auth/logout"
+            className="p-2 text-zinc-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+            title="Abmelden"
+          >
+            <LogOut className="w-4 h-4" />
+          </a>
         </div>
 
       </div>
