@@ -11,33 +11,34 @@ export default function BroyLogo({ size = 48, className = '', color = 'currentCo
         xmlns="http://www.w3.org/2000/svg"
         className="transition-transform duration-300 hover:scale-105"
       >
-        {/* Outer Geometric Frame with interrupted top & bottom lines (Susan Broy Official Logo) */}
-        {/* Left Corner Bracket [ */}
+        {/* Susan Broy Official Logo: Interlocking rotational symmetry frame */}
+        
+        {/* Left Segment: Top-Left to Bottom-Left with upward vertical stem */}
         <path 
-          d="M 70,20 L 20,20 L 20,180 L 70,180" 
+          d="M 90,20 L 20,20 L 20,180 L 90,180 L 90,130" 
           stroke={color} 
-          strokeWidth="14" 
+          strokeWidth="13" 
           strokeLinecap="square" 
           strokeLinejoin="miter"
         />
         
-        {/* Right Corner Bracket ] */}
+        {/* Right Segment: Top-Right to Bottom-Right with downward vertical stem */}
         <path 
-          d="M 130,20 L 180,20 L 180,180 L 130,180" 
+          d="M 110,70 L 110,20 L 180,20 L 180,180 L 110,180" 
           stroke={color} 
-          strokeWidth="14" 
+          strokeWidth="13" 
           strokeLinecap="square" 
           strokeLinejoin="miter"
         />
 
-        {/* Central Bold Typography BROY */}
+        {/* Central Typography BROY */}
         <text 
           x="100" 
           y="116" 
           fill={color} 
           fontSize="46" 
           fontWeight="900" 
-          fontFamily="Montserrat, 'Inter', sans-serif" 
+          fontFamily="Montserrat, 'Inter', system-ui, sans-serif" 
           textAnchor="middle"
           letterSpacing="3"
         >
