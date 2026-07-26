@@ -23,6 +23,13 @@ export const PRESET_IMAGES = {
   atelier: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=85'
 };
 
+export const REEL_TEXT_OVERLAY_STYLES = [
+  { id: 'kinetic_hero', name: 'Kinetic Typography (Zentraler Titel & Fakten)', desc: 'Großer, animierter Haupttitel mit Sanfteinblendung mitten im Video' },
+  { id: 'exhibition_card', name: 'Galerie-Poster Overlay (Ort, Datum & Zeiten)', desc: 'Elegante Ausstellungs-Einblendung mit Ort, Vernissage-Datum & Zeiten' },
+  { id: 'subtitles_minimal', name: 'Minimalistische Untertitel (Zentriert unten)', desc: 'Schlichte, moderne Textzeilen im unteren Videobereich' },
+  { id: 'broy_watermark_quote', name: 'BROY Zitat & Philosophie Overlay', desc: 'Typografische Zitat-Einblendung mit BROY-Logo Wasserzeichen' }
+];
+
 export const DEMO_POSTS = [
   {
     id: 'post-1',
@@ -30,10 +37,10 @@ export const DEMO_POSTS = [
     category: 'exhibition',
     medium: 'mixed',
     date: '2026-07-28',
-    type: 'feed',
+    type: 'reel',
     mediaUrl: PRESET_IMAGES.exhibition,
     location: 'Galerie von&von, Nürnberg',
-    hours: 'Di-Fr 11-18 Uhr, Sa 11-15 Uhr',
+    hours: 'Di–Fr 11–18 Uhr, Sa 11–15 Uhr',
     keywords: 'Ausstellungseröffnung, Skulptur & Raum, Einladung',
     tags: ['@galerie_vonundvon', '@artkarlsruhe'],
     accentColor: '#D4AF37',
@@ -41,30 +48,36 @@ export const DEMO_POSTS = [
     variants: [
       {
         id: 'var-1-a',
-        name: 'Variant A: Offizielle Vernissage-Einladung',
-        style: 'Minimalistische Galerie-Einladung mit Datum & Adresse',
-        caption: `HERZLICHE EINLADUNG zur Ausstellung "SPATIAL PRESENCE".\n\nErleben Sie ausgewählte Beton-Skulpturen und großformatige S/W-Grafiken von Susan Broy.\n\n📍 Ort: Galerie von&von, Nürnberg\n🗓️ Vernissage: Freitag, 18.00 Uhr\n🕒 Öffnungszeiten: Di–Fr 11–18 Uhr, Sa 11–15 Uhr\n\nWir freuen uns auf Ihren Besuch.\n@syken_broy @galerie_vonundvon`,
+        name: 'Variante A: Ausstellungs-Poster Overlay (Werbung mit Daten)',
+        overlayStyle: 'exhibition_card',
+        overlayText: 'AUSSTELLUNG "SPATIAL PRESENCE"\nGalerie von&von, Nürnberg\nVernissage: 28. Juli 2026\nÖffnungszeiten: Di–Fr 11–18 Uhr',
+        style: 'Dynamischer Kameraschwenk mit eingeblendeten Ausstellungs-Eckdaten direkt im Video',
+        caption: `HERZLICHE EINLADUNG zur Ausstellung "SPATIAL PRESENCE".\n\nErleben Sie ausgewählte Beton-Skulpturen und großformatige S/W-Grafiken von Susan Broy.\n\n📍 Ort: Galerie von&von, Nürnberg\n🗓️ Eröffnung: 28. Juli 2026\n🕒 Öffnungszeiten: Di–Fr 11–18 Uhr, Sa 11–15 Uhr\n\nWir freuen uns auf Ihren Besuch.\n@syken_broy @galerie_vonundvon`,
         hashtags: ['#susanbroy', '#ausstellung', '#vernissage', '#contemporaryart', '#nürnberg', '#artgallery'],
         audio: 'Ambient Calm — Deep Resonance',
-        layout: 'fullscreen_clean'
+        transitionEffect: 'ken_burns_zoom'
       },
       {
         id: 'var-1-b',
-        name: 'Variant B: Kuratorisches Statement & Countdown',
-        style: 'Architektonischer Textfokus mit Ausstellungs-Informationen',
-        caption: `"Form im Raum — Die Kunst der raumgreifenden Präsenz."\n\nAb nächster Woche im Rahmen der Ausstellung "SPATIAL PRESENCE" in Nürnberg zu sehen.\n\nBesuchszeiten & Details: www.susanbroy.com\nMit Werken von @syken_broy`,
+        name: 'Variante B: Kinetic Typography Reel (Dynamische Texteinblendung)',
+        overlayStyle: 'kinetic_hero',
+        overlayText: 'SUSAN BROY\nSPATIAL PRESENCE\nGALERIE VON&VON',
+        style: 'Große kinetische Schrift-Einblendung synchron zur Musik',
+        caption: `Skulptur & Raumpräsenz.\n\nAb 28. Juli 2026 im Rahmen der Ausstellung "SPATIAL PRESENCE" in Nürnberg zu sehen.\n\nDetails: www.susanbroy.com\nKünstlerin: @syken_broy`,
         hashtags: ['#susanbroy', '#exhibition2026', '#minimalism', '#sculpturegallery'],
-        audio: 'Pulse of Silence — Studio Minimal',
-        layout: 'passepartout_dark'
+        audio: 'Pulse of Silence — Atmospheric Beat',
+        transitionEffect: 'light_sweep'
       },
       {
         id: 'var-1-c',
-        name: 'Variant C: Atelier & Aufbau-Vorschau',
-        style: 'Storytelling über die Vorbereitung der Ausstellung',
+        name: 'Variante C: Atelier-Prozess & Einblick (Behind The Scenes)',
+        overlayStyle: 'broy_watermark_quote',
+        overlayText: '"Jedes Werkstück fordert seinen eigenen Ort im Raum."',
+        style: 'Werkstatt-Impressionen mit animiertem Zitat-Overlay im Video',
         caption: `Der Aufbau läuft.\n\nEinblicke in die Vorbereitungen für die kommende Ausstellung "SPATIAL PRESENCE". Jedes Objekt findet seinen präzisen Ort im Raum.\n\nAtelier: @syken_broy`,
         hashtags: ['#susanbroy', '#behindthescenes', '#exhibitionsetup', '#ateliergauting'],
         audio: 'Natural Studio Acoustics — Quiet Space',
-        layout: 'editorial_quote'
+        transitionEffect: 'slow_pan'
       }
     ]
   }
@@ -76,147 +89,137 @@ export async function generatePostVariants(inputData) {
   const category = inputData.category || 'artwork';
   const mediumInfo = ART_MEDIUMS.find(m => m.id === inputData.medium);
 
+  const titleClean = inputData.title || (category === 'exhibition' ? 'Ausstellung' : category === 'atelier' ? 'Atelier Gauting' : 'Skulptur');
+  const locClean = inputData.location || 'Atelier Gauting';
+  const hoursClean = inputData.hours || 'Nach Vereinbarung';
+  const keywordsClean = inputData.keywords || 'Form im Raum, Stille, Reduktion';
+
   let generatedVariants = [];
 
   if (category === 'exhibition') {
-    // Exhibition / Vernissage focused post variants
     generatedVariants = [
       {
         id: `gen-${Date.now()}-a`,
-        name: 'Variant A: Einladung & Ausstellungsdaten',
-        style: 'Klar strukturierte Galerie-Einladung mit Ort & Zeiten',
-        caption: `EINLADUNG zur Ausstellung "${inputData.title.toUpperCase()}".\n\n${inputData.keywords || 'Herzliche Einladung zur Ausstellungs-Vorschau.'}\n\n📍 Ort / Galerie: ${inputData.location || 'Atelier Gauting / Galerie'}\n🕒 Öffnungszeiten: ${inputData.hours || 'Di–Fr 11–18 Uhr, Sa 11–15 Uhr'}\n🗓️ Datum: ${inputData.date}\n\nWir freuen uns auf Ihren Besuch.\n@syken_broy ${inputData.tags.join(' ')}`,
+        name: 'Variante A: Ausstellungs-Poster Overlay (Werbung im Video)',
+        overlayStyle: 'exhibition_card',
+        overlayText: `${titleClean.toUpperCase()}\n📍 ${locClean}\n🗓️ Ab ${inputData.date}\n🕒 ${hoursClean}`,
+        style: 'Video-Reel mit direkt eingebrannten Ausstellungs-Eckdaten (Ort, Datum & Zeiten)',
+        caption: `HERZLICHE EINLADUNG zur Ausstellung "${titleClean}".\n\n${keywordsClean}\n\n📍 Ort: ${locClean}\n🗓️ Datum: ${inputData.date}\n🕒 Öffnungszeiten: ${hoursClean}\n\nKünstlerin: @syken_broy ${inputData.tags.join(' ')}`,
         hashtags: ['#susanbroy', '#ausstellung', '#vernissage', '#contemporaryart', '#artgallery', '#exhibition'],
         audio: 'Ambient Calm — Deep Resonance',
-        layout: 'fullscreen_clean'
+        transitionEffect: 'ken_burns_zoom'
       },
       {
         id: `gen-${Date.now()}-b`,
-        name: 'Variant B: Kuratorischer Fokus & Raumkonzept',
-        style: 'Architektur-Fokus auf die Präsentation im Galerieraum',
-        caption: `AUSSTELLUNG: "${inputData.title}"\n\n"Die Skulptur fordert den Raum – nicht durch Lautstärke, sondern durch Präsenz."\n\nLocation: ${inputData.location || 'Galerie'}\nDetails & Katalog: www.susanbroy.com\n\nAtelier: @syken_broy ${inputData.tags.join(' ')}`,
+        name: 'Variante B: Kinetic Typography Reel (Dynamische Schrift)',
+        overlayStyle: 'kinetic_hero',
+        overlayText: `SUSAN BROY\n${titleClean.toUpperCase()}\n${locClean.toUpperCase()}`,
+        style: 'Große, rhythmische Text-Einblendungen direkt auf den Videoclip projiziert',
+        caption: `AUSSTELLUNG: "${titleClean}"\n\n${keywordsClean}\n\nLocation: ${locClean}\nInformationen & Katalog: www.susanbroy.com\n\n@syken_broy ${inputData.tags.join(' ')}`,
         hashtags: ['#susanbroy', '#sculptureexhibition', '#artcollector', '#minimalism', '#spatialart'],
         audio: 'Pulse of Silence — Atmospheric Beat',
-        layout: 'passepartout_dark'
+        transitionEffect: 'light_sweep'
       },
       {
         id: `gen-${Date.now()}-c`,
-        name: 'Variant C: Impressionen & Countdown-Story',
-        style: 'Behind-the-Scenes Einblick in den Ausstellungsaufbau',
-        caption: `Impressionen vor der Eröffnung von "${inputData.title}".\n\nJede Skulptur besetzt ihren eigenen Raumkontext.\n\nBesuchen Sie uns ab ${inputData.date} in ${inputData.location || 'der Galerie'}.\n@syken_broy`,
+        name: 'Variante C: Zitat & Philosophie Overlay',
+        overlayStyle: 'broy_watermark_quote',
+        overlayText: `"Form im Raum – Die Kunst der raumgreifenden Präsenz."`,
+        style: 'Minimalistische Zitat-Einblendung mit BROY-Logo auf dem Reel',
+        caption: `Impressionen vor der Eröffnung von "${titleClean}".\n\n${keywordsClean}\n\nBesuchen Sie uns ab ${inputData.date} in ${locClean}.\n@syken_broy`,
         hashtags: ['#susanbroy', '#galleryview', '#contemporarystudio', '#artcurator'],
         audio: 'Natural Studio Acoustics — Quiet Space',
-        layout: 'editorial_quote'
+        transitionEffect: 'slow_pan'
       }
     ];
   } else if (category === 'atelier') {
-    // Studio / Process focused post variants
     generatedVariants = [
       {
         id: `gen-${Date.now()}-a`,
-        name: 'Variant A: Atelier-Impression & Arbeitsprozess',
-        style: 'Fokus auf Licht, Werkzeuge und Material-Entstehung im Atelier',
-        caption: `EINBLICK INS ATELIER GAUTING.\n\n${inputData.keywords || 'Der Entstehungsprozess im Dialog zwischen Werkstoff und Form.'}\n\nMaterial & Prozess im Fokus.\nKünstlerin: @syken_broy`,
+        name: 'Variante A: Atelier-Impression & Videotext',
+        overlayStyle: 'kinetic_hero',
+        overlayText: `ATELIER GAUTING\n${titleClean.toUpperCase()}\nWERKSTATT-EINBLICK`,
+        style: 'Behind-The-Scenes Videoclip mit eingebranntem Werkstatt-Titel',
+        caption: `EINBLICK INS ATELIER GAUTING.\n\n${keywordsClean}\n\nDer Entstehungsprozess im Dialog zwischen Werkstoff und Form.\nKünstlerin: @syken_broy`,
         hashtags: ['#susanbroy', '#ateliergauting', '#behindthescenes', '#workinprogress', '#sculptorstudio'],
         audio: 'Natural Studio Acoustics — Quiet Space',
-        layout: 'fullscreen_clean'
+        transitionEffect: 'slow_pan'
       },
       {
         id: `gen-${Date.now()}-b`,
-        name: 'Variant B: Materialkunde & Haptik',
-        style: 'Haptische Nahaufnahme der Werkzeuge & Rohstoffe',
-        caption: `RAU & PRÄZISE.\n\nVom flüssigen Guss zur massiven Form im Raum.\n\nAtelier Gauting — @syken_broy ${inputData.tags.join(' ')}`,
+        name: 'Variante B: Materialkunde Video-Overlay',
+        overlayStyle: 'subtitles_minimal',
+        overlayText: `Werkstoff & Haptik — Atelier Gauting`,
+        style: 'Haptische Video-Nahaufnahme mit zentrierten Untertiteln',
+        caption: `RAU & PRÄZISE.\n\n${keywordsClean}\n\nVom flüssigen Guss zur massiven Form im Raum.\nAtelier Gauting — @syken_broy ${inputData.tags.join(' ')}`,
         hashtags: ['#susanbroy', '#materialart', '#haptic', '#contemporaryprocess'],
         audio: 'Ambient Calm — Deep Resonance',
-        layout: 'passepartout_dark'
+        transitionEffect: 'ken_burns_zoom'
       },
       {
         id: `gen-${Date.now()}-c`,
-        name: 'Variant C: Zitat aus dem Atelier',
-        style: 'Philosophisches Zitat über die Arbeit im Atelier',
+        name: 'Variante C: Zitat auf Videoclip',
+        overlayStyle: 'broy_watermark_quote',
+        overlayText: `"Im Atelier geht es nicht darum, Formen zu erfinden, sondern das Überflüssige wegzulassen."`,
+        style: 'Typografische Zitat-Animation auf den Werkstatt-Videoclip',
         caption: `"Im Atelier geht es nicht darum, Formen zu erfinden, sondern das Überflüssige wegzulassen."\n\nSusan Broy — @syken_broy`,
         hashtags: ['#susanbroy', '#artistquote', '#minimalistmindset', '#artphilosophy'],
         audio: 'Pulse of Silence — Atmospheric Beat',
-        layout: 'editorial_quote'
-      }
-    ];
-  } else if (category === 'statement') {
-    // Artist Statement / Philosophy variants
-    generatedVariants = [
-      {
-        id: `gen-${Date.now()}-a`,
-        name: 'Variant A: Raumpräsenz & Philosophie',
-        style: 'Klassisches Susan Broy Statement zur minimalistischen Kunst',
-        caption: `KUNST DER RAUMGREIFENDEN PRÄSENZ.\n\n${inputData.keywords || 'Formen, die den Raum ausfüllen, ohne ihn zu überfordern.'}\n\nMehr zur Philosophie auf www.susanbroy.com\nKünstlerin: @syken_broy`,
-        hashtags: ['#susanbroy', '#minimalistart', '#artphilosophy', '#formimraum'],
-        audio: 'Ambient Calm — Deep Resonance',
-        layout: 'fullscreen_clean'
-      },
-      {
-        id: `gen-${Date.now()}-b`,
-        name: 'Variant B: Kuratorisches Zitat',
-        style: 'Typografisches Zitat-Layout mit Broy Watermark',
-        caption: `"Die Stille der Form erzeugt die Resonanz im Betrachter."\n\nSusan Broy — Studio Gauting\n@syken_broy`,
-        hashtags: ['#susanbroy', '#quote', '#contemporarysculpture', '#minimalart'],
-        audio: 'Pulse of Silence — Atmospheric Beat',
-        layout: 'passepartout_dark'
-      },
-      {
-        id: `gen-${Date.now()}-c`,
-        name: 'Variant C: Monochromes Manifest',
-        style: 'Reduziertes Schwarz-Weiß Statement',
-        caption: `SUSAN BROY — ATELIER GAUTING.\n\nMinimalismus als klare Haltung im Raum.\n\n@syken_broy ${inputData.tags.join(' ')}`,
-        hashtags: ['#susanbroy', '#monochromeart', '#sculptureartist'],
-        audio: 'Natural Studio Acoustics — Quiet Space',
-        layout: 'editorial_quote'
+        transitionEffect: 'light_sweep'
       }
     ];
   } else {
-    // Default Artwork / Sculpture variants
-    const medLabel = mediumInfo ? mediumInfo.label : 'Kunstwerk';
+    // Default Artwork
+    const medLabel = mediumInfo ? mediumInfo.label : 'Beton & Metall';
     generatedVariants = [
       {
         id: `gen-${Date.now()}-a`,
-        name: 'Variant A: Architektur & Materialstille',
-        style: 'Langsame, meditative Kameraschwenks über Beton/Metall-Strukturen',
-        caption: `${inputData.title.toUpperCase()} — Form & Raum.\n\n${inputData.keywords || 'Reduktion auf das Wesentliche.'} Die Wechselwirkung von scharfer Kante und Schatten erzeugt eine raumgreifende Präsenz.\n\nMaterial: ${medLabel}\nAtelier: @syken_broy ${inputData.tags.join(' ')}`,
+        name: 'Variante A: Kinetischer Werkstitteltitel (In-Video Text)',
+        overlayStyle: 'kinetic_hero',
+        overlayText: `${titleClean.toUpperCase()}\n${medLabel.toUpperCase()}`,
+        style: 'Werkstück-Video mit direkt im Video schwebendem Titel & Materialbezeichnung',
+        caption: `${titleClean.toUpperCase()} — Form & Raum.\n\n${keywordsClean}\n\nMaterial: ${medLabel}\nAtelier: @syken_broy ${inputData.tags.join(' ')}`,
         hashtags: ['#susanbroy', '#contemporaryart', '#concreteart', '#metalsculpture', '#minimalism', '#formimraum'],
         audio: 'Ambient Calm — Deep Resonance',
-        layout: 'fullscreen_clean'
+        transitionEffect: 'ken_burns_zoom'
       },
       {
         id: `gen-${Date.now()}-b`,
-        name: 'Variant B: Grafischer Kontrast (BROY Frame)',
-        style: 'Rahmen-Design mit BROY-Logo-Wasserzeichen & Farbkontrast',
-        caption: `Präzision & Haptik.\n\n"${inputData.keywords}" im Fokus. Minimalismus bedeutet nicht Abwesenheit, sondern die perfekte Balance der Elemente.\n\nPartner: ${inputData.tags.join(' ') || '@galerie_vonundvon'}\nKünstlerin: @syken_broy`,
+        name: 'Variante B: Galerie-Passpartout Overlay',
+        overlayStyle: 'exhibition_card',
+        overlayText: `${titleClean.toUpperCase()}\nMaterial: ${medLabel}\nAtelier Susan Broy, Gauting`,
+        style: 'Galerie-Poster Einblendung im oberen Drittel des Reel-Videos',
+        caption: `Präzision & Haptik.\n\n"${keywordsClean}" im Fokus.\n\nPartner: ${inputData.tags.join(' ') || '@galerie_vonundvon'}\nKünstlerin: @syken_broy`,
         hashtags: ['#susanbroy', '#minimalistart', '#artgallery', '#sculptor', '#artcollector'],
-        audio: 'Pulse of Silence — Atmospheric Studio Beat',
-        layout: 'passepartout_dark'
+        audio: 'Pulse of Silence — Atmospheric Beat',
+        transitionEffect: 'light_sweep'
       },
       {
         id: `gen-${Date.now()}-c`,
-        name: 'Variant C: Atelier & Ausstellungs-Story',
-        style: 'Kuratorische Vorschau mit Detail-Guss & Zitat',
-        caption: `Blick ins Atelier Gauting.\n\nEntstehung und Raumwirkung von ${inputData.title}. Gezeigt im Ausstellungs-Kontext.\n\nBesuchen Sie www.susanbroy.com für weitere Einblicke.\n@syken_broy`,
+        name: 'Variante C: Zitat & Raumwirkung Overlay',
+        overlayStyle: 'broy_watermark_quote',
+        overlayText: `"Stille der Form, Präsenz im Raum."`,
+        style: 'Minimalistische Zitat-Projektion direkt auf das Kunstwerk-Video',
+        caption: `Präsenz im Raum.\n\n${keywordsClean}\n\nBesuchen Sie www.susanbroy.com für weitere Einblicke.\n@syken_broy`,
         hashtags: ['#susanbroy', '#exhibition', '#ateliergauting', '#contemporarystudio'],
         audio: 'Natural Studio Acoustics — Quiet Space',
-        layout: 'editorial_quote'
+        transitionEffect: 'slow_pan'
       }
     ];
   }
 
   return {
     id: `post-${Date.now()}`,
-    title: inputData.title || (category === 'exhibition' ? 'Ausstellung' : 'Unbenanntes Werk'),
+    title: titleClean,
     category,
     medium: inputData.medium || 'mixed',
     date: inputData.date || new Date().toISOString().split('T')[0],
-    type: inputData.type || 'reel',
+    type: 'reel',
     mediaUrl: inputData.mediaUrl || PRESET_IMAGES[category] || PRESET_IMAGES.concrete,
-    keywords: inputData.keywords,
+    keywords: keywordsClean,
     tags: inputData.tags || ['@syken_broy'],
-    location: inputData.location,
-    hours: inputData.hours,
+    location: locClean,
+    hours: hoursClean,
     accentColor: inputData.accentColor || '#E2F518',
     status: 'review_ready',
     variants: generatedVariants,
