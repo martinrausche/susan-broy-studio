@@ -174,7 +174,7 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, textarea, select {
   color: #34C759;
 }
 
-/* Custom Buttons - Architectural Gallery Styling (No Higgsfield Neon) */
+/* Custom Buttons */
 .btn-primary {
   background: var(--text-primary);
   color: var(--bg-primary);
@@ -250,4 +250,73 @@ h1, h2, h3, h4, h5, h6, p, span, button, input, textarea, select {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ========================================================================= */
+/* CONTINUOUS REAL-TIME VIDEO ANIMATIONS (Ken-Burns Loop, Light Fade, Slide) */
+/* ========================================================================= */
+
+@keyframes continuousKenBurns {
+  0% {
+    transform: scale(1.05) translate(0px, 0px);
+  }
+  50% {
+    transform: scale(1.22) translate(-8px, -12px);
+  }
+  100% {
+    transform: scale(1.05) translate(0px, 0px);
+  }
+}
+
+@keyframes continuousLightFade {
+  0% {
+    filter: brightness(1) contrast(1);
+    transform: scale(1.04);
+  }
+  33% {
+    filter: brightness(1.25) contrast(1.1);
+    transform: scale(1.12) rotate(0.8deg);
+  }
+  66% {
+    filter: brightness(0.85) contrast(1.15);
+    transform: scale(1.08) rotate(-0.5deg);
+  }
+  100% {
+    filter: brightness(1) contrast(1);
+    transform: scale(1.04);
+  }
+}
+
+@keyframes continuousSlidePan {
+  0% {
+    transform: scale(1.15) translateX(-4%);
+  }
+  50% {
+    transform: scale(1.15) translateX(4%);
+  }
+  100% {
+    transform: scale(1.15) translateX(-4%);
+  }
+}
+
+@keyframes continuousPulseLight {
+  0% { opacity: 0.15; }
+  50% { opacity: 0.55; }
+  100% { opacity: 0.15; }
+}
+
+.reel-motion-ken-burns {
+  animation: continuousKenBurns 10s ease-in-out infinite alternate;
+}
+
+.reel-motion-light-fade {
+  animation: continuousLightFade 7s ease-in-out infinite alternate;
+}
+
+.reel-motion-slide-pan {
+  animation: continuousSlidePan 8s ease-in-out infinite alternate;
+}
+
+.reel-light-overlay {
+  animation: continuousPulseLight 4s ease-in-out infinite;
 }

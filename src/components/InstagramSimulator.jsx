@@ -17,14 +17,14 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
 
   const transitionEffect = variant?.transitionEffect || 'zoom_pan';
   const overlayText = variant?.overlayText || post?.title || 'SUSAN BROY';
-  const textColor = variant?.textColor || 'black'; // 'black' for white space, 'white' for dark space
-  const overlayPosition = variant?.overlayPosition || 'top_angled'; // 'top_angled', 'side_vertical', 'top_left', 'top_right'
+  const textColor = variant?.textColor || 'black';
+  const overlayPosition = variant?.overlayPosition || 'top_angled';
   const rotationAngle = variant?.rotationAngle || (overlayPosition === 'top_angled' ? '-8deg' : overlayPosition === 'side_vertical' ? '90deg' : '0deg');
 
   // Text Lines Split for Kinetic Animation Phases
   const textLines = overlayText.split('\n').filter(Boolean);
 
-  // Kinetic Text Animation Phase Loop
+  // Kinetic Text Animation Phase Loop (Continuous Pulse)
   useEffect(() => {
     if (!isPlaying) return;
 
@@ -35,16 +35,24 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
     return () => clearInterval(textInterval);
   }, [isPlaying, textLines.length]);
 
-  // Reel Slide Auto-Advance Loop
+  // Reel Slide Auto-Advance Loop (Changes asset every 5 seconds)
   useEffect(() => {
     if (!isPlaying || assetList.length <= 1) return;
 
     const slideTimer = setInterval(() => {
       setCurrentSlideIdx(prev => (prev + 1) % assetList.length);
-    }, 4500);
+    }, 5000);
 
     return () => clearInterval(slideTimer);
   }, [isPlaying, assetList.length]);
+
+  // Dynamic CSS Animation Class based on Selected Transition Effect
+  const motionClass = 
+    transitionEffect === 'light_fade' 
+      ? 'reel-motion-light-fade' 
+      : transitionEffect === 'slide_push'
+      ? 'reel-motion-slide-pan'
+      : 'reel-motion-ken-burns';
 
   return (
     <div className="flex flex-col items-center gap-4 my-2 w-full max-w-[360px]">
@@ -61,40 +69,35 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
             </div>
             <div>
               <span className="text-[11px] font-bold text-white block leading-none">syken_broy</span>
-              <span className="text-[9px] text-gray-400">Atelier Gauting • Pure Video Reel</span>
+              <span className="text-[9px] text-gray-400">Atelier Gauting • Active Reel Motion</span>
             </div>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-              REEL VIDEO
+            <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
+              LIVE MOTION
             </span>
           </div>
         </div>
 
-        {/* Video Reel Player Canvas - Pure Video without Carousel Arrows */}
+        {/* Video Reel Player Canvas - Continuous CSS Keyframe Loop */}
         <div className="relative flex-1 bg-zinc-950 overflow-hidden flex items-center justify-center group">
           
-          {/* Active Asset Image with Continuous Dynamic Motion */}
+          {/* Active Asset Image with Continuous CSS Keyframe Motion */}
           <div className="relative w-full h-full overflow-hidden">
             <img
+              key={`${currentAsset.url}-${currentSlideIdx}`}
               src={currentAsset.url}
               alt="Reel Active Media"
-              className={`w-full h-full object-cover transition-transform duration-[4500ms] ease-out ${
-                isPlaying && transitionEffect === 'zoom_pan'
-                  ? 'scale-125 translate-x-2 -translate-y-2'
-                  : isPlaying && transitionEffect === 'light_fade'
-                  ? 'scale-110 rotate-1'
-                  : 'scale-105'
-              }`}
+              className={`w-full h-full object-cover ${isPlaying ? motionClass : 'scale-105'}`}
             />
             
-            {/* Dynamic Studio Lighting Animation */}
+            {/* Dynamic Studio Lighting Overlay (Pulsing Light Sweep) */}
             {isPlaying && (
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/50 via-transparent to-white/20 animate-pulse duration-[2800ms] pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-black/50 via-transparent to-white/20 reel-light-overlay pointer-events-none" />
             )}
 
-            {/* Subtle Vignette Overlay for Depth */}
+            {/* Subtle Vignette Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
 
             {/* ========================================================================= */}
@@ -105,20 +108,19 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
             </div>
 
             {/* ========================================================================= */}
-            {/* NEGATIVE SPACE KINETIC TYPOGRAPHY (Placed in White/Empty Space - NOT over artwork) */}
-            {/* Supports Angled (-8° Tilt), Vertical (90° Side), and Corner Placements */}
+            {/* NEGATIVE SPACE KINETIC TYPOGRAPHY (Placed in White/Empty Space) */}
             {/* ========================================================================= */}
 
             {textLines.length > 0 && (
               <div 
-                className={`absolute inset-x-4 pointer-events-none z-30 transition-all duration-500 ${
+                className={`absolute pointer-events-none z-30 transition-all duration-500 ${
                   overlayPosition === 'side_vertical'
                     ? 'top-20 left-2 right-auto origin-top-left'
                     : overlayPosition === 'top_right'
                     ? 'top-8 right-4 left-auto text-right'
                     : overlayPosition === 'top_left'
                     ? 'top-8 left-4 text-left'
-                    : 'top-10 inset-x-4 text-center' // top_angled default
+                    : 'top-10 inset-x-4 text-center'
                 }`}
                 style={{
                   transform: rotationAngle !== '0deg' ? `rotate(${rotationAngle})` : 'none'
@@ -164,11 +166,11 @@ export default function InstagramSimulator({ post, variant, watermarkColor = 'wh
               </div>
             </button>
 
-            {/* Reel Video Progress Line (Single Line for Video) */}
+            {/* Reel Video Progress Line */}
             <div className="absolute top-2 inset-x-3 h-1 bg-white/30 rounded-full overflow-hidden z-30">
               <div 
                 className={`h-full bg-white transition-all duration-300 ${
-                  isPlaying ? 'w-full transition-all duration-[4500ms] ease-linear' : 'w-full'
+                  isPlaying ? 'w-full transition-all duration-[5000ms] ease-linear' : 'w-full'
                 }`}
               />
             </div>
